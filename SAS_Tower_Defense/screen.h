@@ -9,11 +9,11 @@ using namespace sf;
 class screen{
 
     protected:
-        std::vector<screen> screens;
+        std::vector<screen*> screens;
         RenderWindow* window;
 
     public:
-        screen();
+        screen(RenderWindow*, std::vector<screen*>);
         virtual ~screen();
         virtual void updateMousePositions();
         virtual void update() = 0;
