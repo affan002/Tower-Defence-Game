@@ -17,5 +17,5 @@ class screen{
         virtual ~screen();
         virtual void updateMousePositions();
         virtual void update() = 0;
-        virtual void render() = 0;
+        virtual void draw() = 0;
 };      

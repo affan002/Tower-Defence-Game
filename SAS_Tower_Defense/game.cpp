@@ -6,7 +6,7 @@ Game::Game(){
     int screen_width = 1280;
     int screen_height = 720;
     window = new sf::RenderWindow(sf::VideoMode(screen_width, screen_height), Name);
-    
+    screens.push_back(new startScreen(window, &screens));
     
 
     while (window->isOpen())

@@ -10,8 +10,9 @@
 
 
 
-class startScreen : screen{
+class startScreen : public screen{
     private:
+        FloatRect titleRect; 
         Font titleFont;
         Text title;
         Texture bgTexture;
@@ -19,4 +20,6 @@ class startScreen : screen{
 
     public:
         startScreen(RenderWindow* w, std::vector<screen*>* s);
+        void update();
+        void draw();
 };
