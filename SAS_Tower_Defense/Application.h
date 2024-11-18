@@ -23,7 +23,7 @@ public:
           startButton(220, 300, 200, 50, "Start"),
           quitButton(220, 350, 200, 50, "Quit"),
           currentState(State::MENU) {
-        if (!backgroundTexture.loadFromFile("SAS_Tower_Defense\\images\\background_start.png")) {
+        if (!backgroundTexture.loadFromFile("images/background_start.png")) {
             std::cerr << "Failed to load background image!" << std::endl;
         }
         backgroundSprite.setTexture(backgroundTexture);

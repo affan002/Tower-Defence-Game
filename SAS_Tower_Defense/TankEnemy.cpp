@@ -25,7 +25,7 @@ TankEnemy::TankEnemy() : currentX(0), currentY(3) {
         {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
         {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
     };
-    if (!texture.loadFromFile("SAS_Tower_Defense\\images\\Tanksprite.png")) {
+    if (!texture.loadFromFile("images/Tanksprite.png")) {
             std::cerr << "Failed to load grass texture!" << std::endl;
         }
     sprite.setTexture(texture);

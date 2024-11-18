@@ -1,2 +1,4 @@
 run.txt
 *.o
+*.exe
+*.h.gch
