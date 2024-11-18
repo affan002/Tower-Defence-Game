@@ -1,6 +1,7 @@
 #include <iostream>
 using namespace std;
 #include "game.h"
+#include "Application.h"
 
 int main(){
     Application app;
