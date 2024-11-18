@@ -39,10 +39,10 @@ private:
 
 public:
     TileMap() {
-        if (!grassTexture.loadFromFile("grass.jpeg")) {
+        if (!grassTexture.loadFromFile(".\\images\\grass.jpeg")) {
             std::cerr << "Failed to load grass texture!" << std::endl;
         }
-        if (!pathTexture.loadFromFile("tile_1.png")) {
+        if (!pathTexture.loadFromFile(".\\images\\tile_1.png")) {
             std::cerr << "Failed to load path texture!" << std::endl;
         }
 
