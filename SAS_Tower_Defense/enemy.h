@@ -1,8 +1,18 @@
-class Enemy {
-public:
-    virtual ~Enemy() {}
+#ifndef ENEMY
+#define ENEMY
 
-    virtual void attack() = 0;
-    virtual void takeDamage(int damage) = 0;
-    virtual bool isDefeated() const = 0;
+#include <SFML/Graphics.hpp>
+
+class Enemy {
+protected:
+    sf::Sprite sprite;
+    sf::Texture texture;
+public:
+    virtual void Update() = 0;
+    virtual void move() = 0;
+    virtual void Render(sf::RenderWindow*) = 0;
+    virtual void findNextPosition() = 0;
 };
+
+#endif
+

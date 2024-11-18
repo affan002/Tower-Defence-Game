@@ -1,4 +1,7 @@
 #include "Game.h"
+#include "enemy.h"
+#include "TankEnemy.h"
+#include "const.h"
 
 Game::Game(){
 

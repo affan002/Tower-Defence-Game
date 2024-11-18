@@ -3,6 +3,8 @@
 #include <vector>
 #include "Button.h"
 #include "TileMap.h"
+#include "enemy.h"
+#include "TankEnemy.h"
 
 class Application {
 private:
@@ -13,6 +15,7 @@ private:
     Button startButton;
     Button quitButton;
     TileMap tileMap;
+    std::vector<Enemy*> enemies;
 
 public:
     Application()
@@ -20,7 +23,7 @@ public:
           startButton(220, 300, 200, 50, "Start"),
           quitButton(220, 350, 200, 50, "Quit"),
           currentState(State::MENU) {
-        if (!backgroundTexture.loadFromFile("images/background_start.png")) {
+        if (!backgroundTexture.loadFromFile("SAS_Tower_Defense\\images\\background_start.png")) {
             std::cerr << "Failed to load background image!" << std::endl;
         }
         backgroundSprite.setTexture(backgroundTexture);
@@ -31,6 +34,20 @@ public:
         float scaleX = static_cast<float>(windowSize.x) / textureSize.x;
         float scaleY = static_cast<float>(windowSize.y) / textureSize.y;
         backgroundSprite.setScale(scaleX, scaleY);
+
+        // Create enemies
+        enemies.push_back(new TankEnemy());
+
+        enemies.push_back(new TankEnemy());
+
+        enemies.push_back(new TankEnemy());
+
+    }
+
+    ~Application() {
+        for (auto enemy : enemies) {
+            delete enemy;
+        }
     }
 
     void run() {
@@ -64,6 +81,12 @@ private:
 
     void update() {
         // Any logic updates can go here
+        if (currentState == State::GAME) {
+            // Update game
+            for (auto enemy : enemies) {
+                enemy->Update();
+            }
+        }
     }
 
     void render() {
@@ -77,6 +100,9 @@ private:
         } else if (currentState == State::GAME) {
             // Render game
             tileMap.draw(window);
+            for (auto enemy : enemies) {
+                enemy->Render(&window);
+            }
         }
 
         window.display();
