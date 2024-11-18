@@ -3,6 +3,7 @@ using namespace std;
 #include "game.h"
 
 int main(){
-    Game game;
+    Application app;
+    app.run();
     return 0;
 }
