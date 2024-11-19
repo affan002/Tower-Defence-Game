@@ -1,10 +1,9 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
 #include <vector>
-
 #include "Button.h"
 #include "TileMap.h"
-#include "enemy.h"
+// #include "Player.h"
 
 class Application {
 private:
@@ -15,13 +14,14 @@ private:
     Button startButton;
     Button quitButton;
     TileMap tileMap;
+    // Player* player;
 
 public:
     Application()
-        : window(sf::VideoMode(640, 480), "Main Menu"),
+        : window(sf::VideoMode(1280, 720), "Main Menu"),
           startButton(220, 300, 200, 50, "Start"),
           quitButton(220, 350, 200, 50, "Quit"),
-          currentState(State::MENU) {
+          currentState("MENU") { // Initial state set to "MENU"
         if (!backgroundTexture.loadFromFile("images/background_start.png")) {
             std::cout << "Failed to load background image!" << std::endl;
         }
@@ -33,6 +33,10 @@ public:
         float scaleX = static_cast<float>(windowSize.x) / textureSize.x;
         float scaleY = static_cast<float>(windowSize.y) / textureSize.y;
         backgroundSprite.setScale(scaleX, scaleY);
+        // player = new Player();
+    }
+    ~Application(){
+        // delete player;
     }
 
     void run() {
@@ -81,8 +85,7 @@ private:
             // Render game
             tileMap.draw(window);
         }
-
+        // player->draw(window);
         window.display();
     }
 };
-

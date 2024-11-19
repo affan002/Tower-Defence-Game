@@ -2,8 +2,8 @@
 #include <iostream>
 #include <vector>
 
-// #include "Player.h"
-#include "Player.cpp"
+#include "Player.h"
+
 
 const int TILE_SIZE = 45; // Size of each tile in pixels
 // const int GRID_WIDTH = 20;
