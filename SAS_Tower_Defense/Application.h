@@ -19,8 +19,8 @@ private:
 public:
     Application()
         : window(sf::VideoMode(1280, 720), "Main Menu"),
-          startButton(220, 300, 200, 50, "Start"),
-          quitButton(220, 350, 200, 50, "Quit"),
+          startButton(525, 475, 200, 50, "Start"),
+          quitButton(525, 550, 200, 50, "Quit"),
           currentState("MENU") { // Initial state set to "MENU"
         if (!backgroundTexture.loadFromFile("images/background_start.png")) {
             std::cout << "Failed to load background image!" << std::endl;
