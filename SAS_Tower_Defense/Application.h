@@ -1,8 +1,10 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
 #include <vector>
+
 #include "Button.h"
 #include "TileMap.h"
+#include "enemy.h"
 
 class Application {
 private:
