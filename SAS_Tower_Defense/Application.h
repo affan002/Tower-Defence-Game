@@ -7,7 +7,7 @@
 class Application {
 private:
     sf::RenderWindow window;
-    enum class State { MENU, GAME } currentState;
+    std::string currentState; 
     sf::Texture backgroundTexture;
     sf::Sprite backgroundSprite;
     Button startButton;
@@ -19,9 +19,9 @@ public:
         : window(sf::VideoMode(640, 480), "Main Menu"),
           startButton(220, 300, 200, 50, "Start"),
           quitButton(220, 350, 200, 50, "Quit"),
-          currentState(State::MENU) {
+          currentState("MENU") { // Initial state set to "MENU"
         if (!backgroundTexture.loadFromFile("images/background_start.png")) {
-            std::cerr << "Failed to load background image!" << std::endl;
+            std::cout << "Failed to load background image!" << std::endl;
         }
         backgroundSprite.setTexture(backgroundTexture);
 
@@ -49,32 +49,33 @@ private:
                 window.close();
             }
 
-            if (currentState == State::MENU && event.type == sf::Event::MouseButtonPressed &&
+            // Handle menu events
+            if (currentState == "MENU" && event.type == sf::Event::MouseButtonPressed &&
                 event.mouseButton.button == sf::Mouse::Left) {
                 sf::Vector2i mousePos = sf::Mouse::getPosition(window);
                 if (startButton.isClicked(mousePos)) {
-                    currentState = State::GAME; // Switch to game state
+                    currentState = "GAME"; // Switch to "GAME" state
                 }
                 if (quitButton.isClicked(mousePos)) {
-                    window.close();
+                    window.close(); // Exit the application
                 }
             }
         }
     }
 
     void update() {
-        // Any logic updates can go here
+        
     }
 
     void render() {
         window.clear();
 
-        if (currentState == State::MENU) {
+        if (currentState == "MENU") {
             // Render menu
             window.draw(backgroundSprite); // Draw the background
             startButton.draw(window);
             quitButton.draw(window);
-        } else if (currentState == State::GAME) {
+        } else if (currentState == "GAME") {
             // Render game
             tileMap.draw(window);
         }
@@ -82,3 +83,4 @@ private:
         window.display();
     }
 };
+
