@@ -27,8 +27,8 @@ private:
     std::pair<int, int> endPos;
     sf::Font endFont;
     sf::Text endText;
-
-    Enemy* e;
+    std::vector<Enemy*> enemies;
+    // Enemy* e;
     sf::RectangleShape whiteSpace;
 
 public:
@@ -64,18 +64,48 @@ public:
         this->endText.setPosition(this->endPos.first,this->endPos.second+5);
 
         std::srand(std::time(nullptr));
-        
-        e = new Enemy(1,"images/ship1.png", startPos, 100, 0.5, 80, 4, 25);
+        enemies.push_back(new Enemy(1, "images/ship1.png", startPos, 100, 0.5, 80, 4, 25));
+        // e = new Enemy(1,"images/ship1.png", startPos, 100, 0.5, 80, 4, 25);
     }
 
     ~TileMap(){
         delete player;
-        delete e;
+        // delete e;
+        for (Enemy* enemy : enemies) {
+        delete enemy;
+    }
+    enemies.clear();
     }
 
-    void update(){
-        e->Update();
+    // void update(){
+        
+    //     e->Update();
+    //     std::pair<int, int> curTile = e->GetCurTile();
+
+    //     if (curTile == getEndPos()){
+            
+    //         player->health -=1;
+    //     }
+    //     player->Update();
+    // }
+    void update() {
+    for (auto it = enemies.begin(); it != enemies.end();) {
+        Enemy* enemy = *it;
+
+        enemy->Update(); // Update each enemy
+
+        // Check if the enemy reached the end position
+        if (enemy->GetCurTile() == getEndPos()) {
+            player->health -= 1; // Deduct health
+            delete enemy;        // Free memory
+            it = enemies.erase(it); // Remove enemy from the list
+        } else {
+            ++it; // Move to the next enemy
+        }
     }
+
+    player->Update(); // Update player logic
+}
    
 
     void draw(sf::RenderWindow& window) {
@@ -101,7 +131,12 @@ public:
         window.draw(this->startText);
         window.draw(this->endText);
         
-        e->Render(window);
+        // e->Render(window);
+
+            // Draw all enemies
+        for (Enemy* enemy : enemies) {
+            enemy->Render(window);
+        }
 
     }
 };

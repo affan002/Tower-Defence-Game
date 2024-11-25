@@ -136,6 +136,9 @@ void Enemy::Update() {
 //     // this->distanceTraveled = dist;
 //     CheckDirection();
 // }
+
+
+
 void Enemy::move() {
 
     std::string s2;
@@ -184,9 +187,9 @@ void Enemy::move() {
         //change = false;
         }
         change = false;
-        }
+        // }
         
-    // }
+    }
 
     std::string s;
     // Determine the next grid position based on direction
@@ -226,27 +229,14 @@ void Enemy::move() {
             return;
     }
 
+    
+
     // Calculate velocity to move towards the next tile
     double m = sqrt(pow(nextTile.first-position.x,2) + pow(nextTile.second - position.y, 2));
-    speed = 0.5;
+    // speed = 0.5;
     xVelocity = (nextTile.first - position.x) * speed / m;
     yVelocity = (nextTile.second - position.y) * speed / m;
 
-    // sf::Font font;
-    // font.loadFromFile("fonts/upheavtt.ttf");
-
-    
-    // debugText.setFont(font);
-    // debugText.setString("Debug Info");
-    // debugText.setCharacterSize(24);
-    // debugText.setFillColor(sf::Color::White);
-    // debugText.setPosition(10, 10);
-    
-    
-
-    
-
-    
         this->startFont.loadFromFile("fonts/upheavtt.ttf");
         this->startText.setFont(this->startFont);
         this->startText.setString(s + "   "  +std::to_string(tile.first) + "   " + std::to_string(tile.second) + "    " + std::to_string(position.x) + "    "  + std::to_string(position.y));
@@ -267,11 +257,6 @@ void Enemy::move() {
         change = true;
     }
     
-    // if (nextTile.first == position.x && nextTile.second == position.y){
-    
-    // }
-
-    
 
     // this->tile = nextTile;
     // Check if the enemy has reached the next tile
@@ -286,73 +271,74 @@ void Enemy::move() {
     // }
 }
 
+
+
 // void Enemy::move() {
-//     // Determine current grid position
 //     int curGridX = position.x / TILE_SIZE;
 //     int curGridY = position.y / TILE_SIZE;
 
-//     // Determine the next direction based on levelMap
-//     if (levelMap[tile.second / TILELEN][tile.first / TILELEN + 1] == 1)
-//         dir = RIGHT;
-//     else if (levelMap[tile.second / TILELEN + 1][tile.first / TILELEN] == 1)
-//         dir = DOWN;
-//     else if (levelMap[tile.second / TILELEN - 1][tile.first / TILELEN] == 1)
-//         dir = UP;
-//     else if (levelMap[tile.second / TILELEN][tile.first / TILELEN - 1] == 1)
-//         dir = LEFT;
-//     else
-//         dir = IDLE;
-
-//     // Determine the next tile and sprite rotation based on direction
-//     switch (dir) {
-//         case RIGHT:
-//             if (levelMap[curGridY][curGridX + 1] == 1) {
-//                 nextTile = getPos(curGridY, curGridX + 1);
-//                 sprite.setRotation(90);
-//             }
-//             break;
-//         case LEFT:
-//             if (levelMap[curGridY][curGridX - 1] == 1) {
-//                 nextTile = getPos(curGridY, curGridX - 1);
-//                 sprite.setRotation(270);
-//             }
-//             break;
-//         case UP:
-//             if (levelMap[curGridY - 1][curGridX] == 1) {
-//                 nextTile = getPos(curGridY - 1, curGridX);
-//                 sprite.setRotation(0);
-//             }
-//             break;
-//         case DOWN:
-//             if (levelMap[curGridY + 1][curGridX] == 1) {
-//                 nextTile = getPos(curGridY + 1, curGridX);
-//                 sprite.setRotation(180);
-//             }
-//             break;
-//         case IDLE:
-//             return; // No movement
+//     // Update direction based on level map
+//     if (change) {
+//         if (levelMap[tile.second / TILELEN][tile.first / TILELEN + 1] == 1 && dir != LEFT) {
+//             dir = RIGHT;
+//             change = false;
+//         } else if (levelMap[tile.second / TILELEN][tile.first / TILELEN - 1] == 1 && dir != RIGHT) {
+//             dir = LEFT;
+//             change = false;
+//         }  else if (levelMap[tile.second / TILELEN + 1][tile.first / TILELEN] == 1 && dir != UP) {
+//             dir = DOWN;
+//             change = false;
+//         } else if (levelMap[tile.second / TILELEN - 1][tile.first / TILELEN] == 1 && dir != DOWN) {
+//             dir = UP;
+//             change = false;
+//         }
 //     }
 
-//     // Calculate velocity to move towards the next tile
-//     xVelocity = (nextTile.first - position.x) / (TILE_SIZE / speed);
-//     yVelocity = (nextTile.second - position.y) / (TILE_SIZE / speed);
+//     // Calculate next tile and velocity
+//     switch (dir) {
+//         case RIGHT:
+//             nextTile = getPos(curGridY, curGridX + 1);
+//             sprite.setRotation(90);
+//             break;
+//         case LEFT:
+//             nextTile = getPos(curGridY, curGridX - 1);
+//             sprite.setRotation(270);
+//             break;
+//         case UP:
+//             nextTile = getPos(curGridY - 1, curGridX);
+//             sprite.setRotation(0);
+//             break;
+//         case DOWN:
+//             nextTile = getPos(curGridY + 1, curGridX);
+//             sprite.setRotation(180);
+//             break;
+//         case IDLE:
+//             return;
+//     }
 
-//     // Update the position
+//     // Calculate velocity
+//     float dx = nextTile.first - position.x;
+//     float dy = nextTile.second - position.y;
+//     float distance = sqrt(dx * dx + dy * dy);
+//     xVelocity = (dx / distance) * speed;
+//     yVelocity = (dy / distance) * speed;
+
+//     // Update position
 //     position.x += xVelocity;
 //     position.y += yVelocity;
 
-//     // Check if the enemy has reached the next tile (with margin)
-//     float margin = 0.5f;
-//     if (abs(position.x - nextTile.first) <= margin && 
-//         abs(position.y - nextTile.second) <= margin) {
-//         // Snap position to the exact tile
-//         position.x = nextTile.first;
-//         position.y = nextTile.second;
+//     // Snap to next tile if close enough
+//     if (fabs(position.x - nextTile.first) < 0.5f && fabs(position.y - nextTile.second) < 0.5f) {
+//         position = { static_cast<float>(nextTile.first), static_cast<float>(nextTile.second) };
 
-//         // Update tile to reflect new grid position
-//         tile = std::make_pair(nextTile.second / TILE_SIZE, nextTile.first / TILE_SIZE);
+//         tile = nextTile;
+//         change = true;
 //     }
 // }
+
+
+
+
 
 
 

@@ -15,7 +15,7 @@ class Player
         int health = 10;
         int coins = 500;
         Player(){
-            {
+            
     this->font.loadFromFile("fonts/upheavtt.ttf");
     this->healthText.setFont(this->font);
     this->healthText.setFillColor(sf::Color::Black);
@@ -31,7 +31,7 @@ class Player
     coinsText.setString("Coins: " + std::to_string(coins));
     this->coinsText.setPosition(1000,5);
     this->healthText.setPosition(1000,40);
-}
+
         }
         void Update(){
             healthText.setString("Health: " + std::to_string(health));
