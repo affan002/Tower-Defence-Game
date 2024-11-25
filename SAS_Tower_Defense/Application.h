@@ -44,6 +44,7 @@ public:
             handleEvents();
             update();
             render();
+            
         }
     }
 
@@ -70,7 +71,9 @@ private:
     }
 
     void update() {
-        
+        if (currentState == "GAME"){
+            tileMap.update();
+        }
     }
 
     void render() {

@@ -2,40 +2,17 @@
 #include <iostream>
 #include <vector>
 
+// #include "Map.h"
+
+#include "enemy.h"
+#include "enemy.cpp"
+// #include "waves.h"
+// #include "waves.cpp"
 #include "Player.h"
-
-
-const int TILE_SIZE = 45; // Size of each tile in pixels
-// const int GRID_WIDTH = 20;
-// const int GRID_HEIGHT = 20;
-
-// Define the path layout using a grid
-const std::vector<std::vector<int>> levelMap = {
-    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-    {0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-    {1, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-    {0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-    {0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-    {0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1},
-    {0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0},
-    {0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0},
-    {0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0},
-    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-    
-};
 
 class TileMap {
 private:
-    sf::RectangleShape whiteSpace;
+    
     sf::Texture grassTexture;
     sf::Texture pathTexture;
     sf::Sprite grassSprite;
@@ -43,8 +20,20 @@ private:
 
     Player* player;
 
+    std::pair<int, int> startPos;
+    sf::Font startFont;
+    sf::Text startText;
+
+    std::pair<int, int> endPos;
+    sf::Font endFont;
+    sf::Text endText;
+
+    Enemy* e;
+    sf::RectangleShape whiteSpace;
+
 public:
     TileMap() {
+        
         if (!grassTexture.loadFromFile("images/grass.jpeg")) {
             std::cerr << "Failed to load grass texture!" << std::endl;
         }
@@ -56,12 +45,38 @@ public:
         pathSprite.setTexture(pathTexture);
 
         player = new Player();
+
+        this->startPos = getStartPos();
+        this->startFont.loadFromFile("fonts/upheavtt.ttf");
+        this->startText.setFont(this->startFont);
+        this->startText.setString("Start");
+        this->startText.setFillColor(Color::Black);
+        this->startText.setCharacterSize(20);
+        this->startText.setPosition(this->startPos.first,this->startPos.second+5);
+
+
+        this->endPos = getEndPos();
+        this->endFont.loadFromFile("fonts/upheavtt.ttf");
+        this->endText.setFont(this->endFont);
+        this->endText.setString("End");
+        this->endText.setFillColor(Color::Black);
+        this->endText.setCharacterSize(20);
+        this->endText.setPosition(this->endPos.first,this->endPos.second+5);
+
+        std::srand(std::time(nullptr));
+        
+        e = new Enemy(1,"images/ship1.png", startPos, 100, 0.5, 80, 4, 25);
     }
 
     ~TileMap(){
         delete player;
+        delete e;
     }
 
+    void update(){
+        e->Update();
+    }
+   
 
     void draw(sf::RenderWindow& window) {
         for (size_t y = 0; y < levelMap.size(); ++y) {
@@ -80,6 +95,13 @@ public:
         whiteSpace.setSize(sf::Vector2f(380, 720));
         whiteSpace.setFillColor(sf::Color::White);
         window.draw(whiteSpace);
+        
         player->draw(window);
+
+        window.draw(this->startText);
+        window.draw(this->endText);
+        
+        e->Render(window);
+
     }
 };
