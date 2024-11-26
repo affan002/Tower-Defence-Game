@@ -6,8 +6,8 @@
 
 #include "enemy.h"
 #include "enemy.cpp"
-// #include "waves.h"
-// #include "waves.cpp"
+#include "Wave.h"
+// #include "Waves.cpp"
 #include "Player.h"
 
 class TileMap {
@@ -27,8 +27,11 @@ private:
     std::pair<int, int> endPos;
     sf::Font endFont;
     sf::Text endText;
-    std::vector<Enemy*> enemies; // waves
-    // std::vector<waves*>  waves;
+
+    // std::vector<Enemy*> enemies; // Waves
+    // std::vector<Waves*>  Waves;
+    Wave* currentWave;
+
     sf::RectangleShape whiteSpace;
 
 public:
@@ -63,18 +66,15 @@ public:
         this->endText.setCharacterSize(20);
         this->endText.setPosition(this->endPos.first,this->endPos.second+5);
 
-        std::srand(std::time(nullptr));
-        enemies.push_back(new Enemy(1, "images/ship1.png", startPos, 100, 0.5, 80, 4, 25)); // waves
+        // std::srand(std::time(nullptr));
+        // enemies.push_back(new Enemy(1, "images/ship1.png", startPos, 100, 0.5, 80, 4, 25)); // Waves
         // e = new Enemy(1,"images/ship1.png", startPos, 100, 0.5, 80, 4, 25);
+        currentWave = new Wave(1, 10, 60, 25);
     }
 
     ~TileMap(){
         delete player;
-        // delete e;
-        for (Enemy* enemy : enemies) {
-        delete enemy; // waves destructor
-    }
-    enemies.clear();
+        delete currentWave;
     }
 
     // void update(){
@@ -89,18 +89,18 @@ public:
     //     player->Update();
     // }
     void update() {
-    for (auto it = enemies.begin(); it != enemies.end();) {
+    for (auto it = currentWave->enemies.begin(); it != currentWave->enemies.end();) {
         Enemy* enemy = *it;
 
-        enemy->Update(); // Update each enemy (waves)
+        enemy->Update();  // Update each enemy
 
         // Check if the enemy reached the end position
-        if (enemy->GetCurTile() == getEndPos()) { // waves
-            player->health -= 1; // Deduct health
-            delete enemy;        // Free memory
-            it = enemies.erase(it); // Remove enemy from the list
+        if (enemy->GetCurTile() == getEndPos()) {
+            player->health -= 1;  // Deduct health
+            delete enemy;         // Free memory
+            it = currentWave->enemies.erase(it);  // Remove enemy from the list
         } else {
-            ++it; // Move to the next enemy
+            ++it;  // Move to the next enemy
         }
     }
 
@@ -134,8 +134,8 @@ public:
         // e->Render(window);
 
             // Draw all enemies
-        for (Enemy* enemy : enemies) {
-            enemy->Render(window);   // waves
+        for (Enemy* enemy : currentWave->enemies) {
+            enemy->Render(window);  // Render each enemy
         }
 
     }
