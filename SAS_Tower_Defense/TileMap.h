@@ -27,8 +27,8 @@ private:
     std::pair<int, int> endPos;
     sf::Font endFont;
     sf::Text endText;
-    std::vector<Enemy*> enemies;
-    // Enemy* e;
+    std::vector<Enemy*> enemies; // waves
+    // std::vector<waves*>  waves;
     sf::RectangleShape whiteSpace;
 
 public:
@@ -64,7 +64,7 @@ public:
         this->endText.setPosition(this->endPos.first,this->endPos.second+5);
 
         std::srand(std::time(nullptr));
-        enemies.push_back(new Enemy(1, "images/ship1.png", startPos, 100, 0.5, 80, 4, 25));
+        enemies.push_back(new Enemy(1, "images/ship1.png", startPos, 100, 0.5, 80, 4, 25)); // waves
         // e = new Enemy(1,"images/ship1.png", startPos, 100, 0.5, 80, 4, 25);
     }
 
@@ -72,7 +72,7 @@ public:
         delete player;
         // delete e;
         for (Enemy* enemy : enemies) {
-        delete enemy;
+        delete enemy; // waves destructor
     }
     enemies.clear();
     }
@@ -92,10 +92,10 @@ public:
     for (auto it = enemies.begin(); it != enemies.end();) {
         Enemy* enemy = *it;
 
-        enemy->Update(); // Update each enemy
+        enemy->Update(); // Update each enemy (waves)
 
         // Check if the enemy reached the end position
-        if (enemy->GetCurTile() == getEndPos()) {
+        if (enemy->GetCurTile() == getEndPos()) { // waves
             player->health -= 1; // Deduct health
             delete enemy;        // Free memory
             it = enemies.erase(it); // Remove enemy from the list
@@ -135,7 +135,7 @@ public:
 
             // Draw all enemies
         for (Enemy* enemy : enemies) {
-            enemy->Render(window);
+            enemy->Render(window);   // waves
         }
 
     }

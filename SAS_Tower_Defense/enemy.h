@@ -61,7 +61,7 @@ class Enemy {
         bool CheckIfDead();
         void GetHit(int damage);
         void InitHealthBar(float, float);
-        void CheckDirection();
+        // void CheckDirection();
         int GetWait();
         int GetTileNr(); //see how far the enemy has gone
         int GetReward();

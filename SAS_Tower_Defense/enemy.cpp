@@ -72,9 +72,10 @@ void Enemy::Update() {
     // }
 
     // Update sprite and health bar positions
-    this->sprite.setPosition(position);
-    healthBar.setPosition(position.x - TILE_SIZE / 2, position.y - TILE_SIZE / 2);
-    healthLeft.setPosition(position.x - TILE_SIZE / 2 + 3, position.y - TILE_SIZE / 2 + 3);
+    sf::Vector2f spritePos(position.x+20,position.y+20);
+    this->sprite.setPosition(spritePos);
+    healthBar.setPosition(spritePos.x - TILE_SIZE / 2, spritePos.y - TILE_SIZE / 2);
+    healthLeft.setPosition(spritePos.x - TILE_SIZE / 2 + 3, spritePos.y - TILE_SIZE / 2 + 3);
     healthLeft.setSize(Vector2f((TILE_SIZE - 6) * std::max(health, 0) / maxHealth, 4));
 }
 
@@ -351,7 +352,7 @@ void Enemy::InitHealthBar(float x, float y) {
     healthLeft.setFillColor(Color::Red);
 }
 
-void Enemy::CheckDirection() {
+// void Enemy::CheckDirection() {
     // switch (dir) {
     //     case UP:
     //         yVelocity = 0-speed;
@@ -375,7 +376,7 @@ void Enemy::CheckDirection() {
     //         break;
     //     }
     
-}
+// }
 
 int Enemy::GetWait(){
     return wait;
