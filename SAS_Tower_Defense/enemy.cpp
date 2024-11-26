@@ -152,6 +152,15 @@ void Enemy::move() {
         if (change){
         for (int i = 0; i < 1; i++){
         if (dir == DOWN || dir == UP || dir == IDLE){
+
+        // if (levelMap[tile.second/TILELEN -1][tile.first/TILELEN ] == 1){
+        //     if (dir == UP){
+        //         dir = UP;
+        //         s2 = "UP";
+        //         break;
+        //     }
+        // }
+
         if (levelMap[tile.second/TILELEN][tile.first/TILELEN + 1] == 1){
             if (dir != LEFT){
                 dir = RIGHT;
@@ -170,6 +179,14 @@ void Enemy::move() {
         }
         
         if (dir == LEFT || dir == RIGHT || dir == IDLE) {
+
+        // if (levelMap[tile.second/TILELEN][tile.first/TILELEN-1] == 1){
+        //     if (dir != RIGHT){
+        //         dir = LEFT;
+        //         s2 = "LEFT";
+        //         break;
+        //     }
+        // }
         if (levelMap[tile.second/TILELEN+1][tile.first/TILELEN] == 1){
             if (dir != UP){
                 dir = DOWN;

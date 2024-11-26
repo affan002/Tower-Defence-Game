@@ -1,3 +1,5 @@
+#include <iostream>
+#include <vector>
 #include <cmath>
 const int TILE_SIZE = 45; // Size of each tile in pixels
 // const int GRID_WIDTH = 20;
@@ -7,10 +9,10 @@ const int TILE_SIZE = 45; // Size of each tile in pixels
 const std::vector<std::vector<int>> levelMap = {
     {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
     {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-    {1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0},
-    {0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0},
+    {1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0},
+    {0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0},
     {0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0},
-    {0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0},
+    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0},
     {0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0},
     {0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0},
     {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0},
@@ -27,6 +29,20 @@ const std::vector<std::vector<int>> levelMap = {
     
 };
 
+    std::pair<int, int> getStartInVec(){
+        std::pair<int, int> Pos;
+        for (int i = 0;i < levelMap.size();i++){
+            
+            if (levelMap[i][0] == 1){
+                Pos.second = i;
+                Pos.first = 0;
+                break;
+            }
+        }
+        
+        return Pos;
+    }
+
     std::pair<int, int> getStartPos(){
         std::pair<int, int> Pos;
         for (int i = 0;i < levelMap.size();i++){
@@ -41,6 +57,20 @@ const std::vector<std::vector<int>> levelMap = {
         return Pos;
     }
     
+    std::pair<int, int> getEndInVec(){
+        std::pair<int, int> Pos;
+        for (int i = 0;i < levelMap.size();i++){
+            
+            if (levelMap[i][19] == 1){
+                Pos.second = i;
+                Pos.first = 19;
+                break;
+            }
+        }
+
+        return Pos;
+    } 
+
     std::pair<int, int> getEndPos(){
         std::pair<int, int> Pos;
         for (int i = 0;i < levelMap.size();i++){
@@ -62,6 +92,15 @@ const std::vector<std::vector<int>> levelMap = {
     }
     bool change = true;
 
+
+
+
+std::vector<std::pair<int,int>> getPath(){
+    std::vector<std::pair<int,int>> path;
+    std::pair<int,int> start = getStartInVec();
+    path.push_back(start);
+    return path;
+}
 
 
 
