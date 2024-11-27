@@ -4,11 +4,11 @@
 
 // #include "Map.h"
 
-#include "enemy.h"
-#include "enemy.cpp"
-// #include "waves.h"
-// #include "waves.cpp"
-#include "Player.h"
+// #include "enemy.h"
+// #include "enemy.cpp"
+// #include "wave.h"
+#include "wave.cpp"
+// #include "Player.h"
 
 class TileMap {
 private:
@@ -29,6 +29,9 @@ private:
     sf::Text endText;
     std::vector<Enemy*> enemies; // waves
     // std::vector<waves*>  waves;
+
+    std::vector<Wave*> waves;
+
     sf::RectangleShape whiteSpace;
 
 public:
@@ -64,6 +67,12 @@ public:
         this->endText.setPosition(this->endPos.first,this->endPos.second+5);
 
         std::srand(std::time(nullptr));
+        this->waves.push_back(new Wave("Wave 1" , 5,0,0,0,0, startPos, player));
+        this->waves.push_back(new Wave("Wave 2" , 10,5,0,0,0, startPos, player));
+        this->waves.push_back(new Wave("Wave 3" , 5,0,5,0,0, startPos, player));
+        this->waves.push_back(new Wave("Wave 4" , 0,5,5,5,0, startPos, player));
+        this->waves.push_back(new Wave("Wave 5" , 0,0,0,0,2, startPos, player));
+
         enemies.push_back(new Enemy(1, "images/ship1.png", startPos, 100, 0.5, 80, 4, 25)); // waves
         // e = new Enemy(1,"images/ship1.png", startPos, 100, 0.5, 80, 4, 25);
     }
@@ -71,6 +80,9 @@ public:
     ~TileMap(){
         delete player;
         // delete e;
+        for(auto i: waves){
+        delete i;
+        }
         for (Enemy* enemy : enemies) {
         delete enemy; // waves destructor
     }
@@ -104,6 +116,14 @@ public:
         }
     }
 
+    // if  (!waves.empty()) {
+    //     (waves.front())->Update();
+    //     if ((waves.front())->HasEnded()){
+    //         waves.front()->~Wave();
+    //         waves.erase(waves.begin());
+    //     }
+    // }
+
     player->Update(); // Update player logic
 }
    
@@ -124,9 +144,7 @@ public:
         whiteSpace.setPosition(900, 0);
         whiteSpace.setSize(sf::Vector2f(380, 720));
         whiteSpace.setFillColor(sf::Color::White);
-        window.draw(whiteSpace);
         
-        player->draw(window);
 
         window.draw(this->startText);
         window.draw(this->endText);
@@ -137,6 +155,13 @@ public:
         for (Enemy* enemy : enemies) {
             enemy->Render(window);   // waves
         }
+
+        if  (!waves.empty()) {
+            (waves.front())->Render(window);
+        }
+        window.draw(whiteSpace);
+        
+        player->draw(window);
 
     }
 };

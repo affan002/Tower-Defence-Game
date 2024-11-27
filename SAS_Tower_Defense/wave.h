@@ -1,30 +1,36 @@
-#ifndef TD_WAVE_HPP
-#define TD_WAVE_HPP
+#include <SFML/Graphics.hpp>
+#include <SFML/Window.hpp>
+// #include "enemy.h"
+#include "enemy.cpp"
+#include "Player.h"
+#include <iostream>
 
-#include "Enemy.h"
-#include <vector>
+// int MAPDIM = 15;
 
 class Wave
 {
 private:
-    int waveNumber;         // The current wave number
-    int enemyCount;         // Number of enemies in the current wave
-    int spawnDelay;         // Delay between enemy spawns (frames)
-    int timeSinceLastSpawn; // Timer to manage spawn delay
-    int rewardPerEnemy;     // Reward per enemy
+
+    std::string name;
+    std::pair<int, int> startPos;
+    Font font;
+    Text text;
+    // enemies
+    std::vector<Enemy *> enemiesWaitlist;
+    std::vector<Enemy *> enemies;
+    sf::Clock spawnClock;
+    float wait = 2;
+    Player *player;
+    // std::map<int, std::vector<std::pair<int, DIRECTION>>> *path;
 
 public:
-    std::vector<Enemy *> enemies; // List of enemies in the wave
-    Wave(int waveNum, int numEnemies, int delay, int reward);
+    Wave(std::string _name, int e1, int e2, int e3, int e4, int e5, std::pair<int, int>, Player*); // number of enemies from each type
     ~Wave();
 
-    void Update();                                                                         // Update logic for spawning and enemy movement
-    void Render(RenderWindow &window);                                                     // Render all enemies in the wave
-    void SpawnEnemy(std::pair<int, int> startPosition, int type, std::string texturePath); // Spawn a new enemy
+    void Update();
+    void Render(sf::RenderWindow& window);
+    // void SetPath(std::map<int, std::vector<std::pair<int, DIRECTION>>> *_path);
+    bool HasEnded();
 
-    bool IsWaveComplete();     // Check if all enemies in the wave have been defeated
-    int GetRemainingEnemies(); // Get the number of remaining enemies
-    int GetWaveReward();       // Get the total reward for the wave
+    std::vector<Enemy *> getCurEnemies();
 };
-
-#endif

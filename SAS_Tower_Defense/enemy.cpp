@@ -35,7 +35,7 @@ void Enemy::Render(RenderWindow& window) {
     window.draw(healthBar);
     window.draw(healthLeft);
     // In the render loop
-    window.draw(startText);
+    // window.draw(startText);
 }
 
 // void Enemy::Update() {
