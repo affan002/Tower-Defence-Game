@@ -88,7 +88,7 @@ private:
         }
         
         if (currentState == "END"){
-            backgroundTexture.loadFromFile("images/Lose.png");
+            backgroundTexture.loadFromFile("images/Loses.png");
             backgroundSprite.setTexture(backgroundTexture);
 
             // Scale the background to fit the window
