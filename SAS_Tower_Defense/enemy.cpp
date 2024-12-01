@@ -31,6 +31,21 @@ Enemy::Enemy(int _type, std::string _path,std::pair<int,int> pos, int _health, f
     type = _type;
     this->tile = pos;
     this->dir = _dir;
+    switch (dir) {
+        case RIGHT:
+            sprite.setRotation(90);
+            break;
+        case LEFT:
+            sprite.setRotation(270);
+            break;
+        case UP:
+            sprite.setRotation(0);
+            break;
+        case DOWN:
+            sprite.setRotation(180);
+            break;
+        
+    }
 }   
 
 
