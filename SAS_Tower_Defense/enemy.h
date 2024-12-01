@@ -6,19 +6,21 @@
 #include <iostream>
 // #include <list>
 #include <stdlib.h> 
+#include <sstream>
 #include "Map.h"
 
 int TILELEN = TILE_SIZE;
-enum DIRECTION{UP, RIGHT , DOWN, LEFT, IDLE};
+
 using namespace sf;
 
 class Enemy {
     private:
+        enum DIRECTION{UP, RIGHT , DOWN, LEFT, IDLE};
         Texture texture;
         Sprite sprite;
         Vector2f position;
 
-        int health;
+        
         int maxHealth;
         RectangleShape healthBar;
         RectangleShape healthLeft;    
@@ -34,19 +36,21 @@ class Enemy {
         int tileNr = 0;
         std::pair<int,int> nextTile;
         int dir = IDLE;
-        int prevDir = IDLE;
+        bool change = true;
+        
+        // std::vector<std::pair<int,int>> visited;
 
         float size;
         int wait;
         int reward;
         int type;
 
-        // sf::Text debugText;
-        sf::Font startFont;
-    sf::Text startText;
+
         
     public:
+        int health;
         Enemy(int _type, std::string _path, std::pair<int,int>, int _health, float _speed, float _size, int _wait, int _reward);
+        Enemy(int _type, std::string _path, std::pair<int,int>, int _health, float _speed, float _size, int _wait, int _reward, int dir);
         ~Enemy();
         void Update();
         void Render(RenderWindow &window);
@@ -54,14 +58,9 @@ class Enemy {
         Sprite GetSprite();
 
         void move();
-        // void SetPath( std::map<int ,std::vector<std::pair<int,DIRECTION>>>* _path, int startPos);
-        // void SetPath(std::map<int ,std::vector<std::pair<int,DIRECTION>>>* _path, int startPos,int dist);
-        // void UpdatePath();
-        // bool CheckEndOfPath();
         bool CheckIfDead();
         void GetHit(int damage);
         void InitHealthBar(float, float);
-        // void CheckDirection();
         int GetWait();
         int GetTileNr(); //see how far the enemy has gone
         int GetReward();
@@ -69,9 +68,13 @@ class Enemy {
         // for debugging
         int getHealth(){return health;}
 
+        void setDir(int dir);
+        int getDir();
         // for freeze_tower
         float getOriginalSpeed();
         void setSpeed(float newSpeed);
+        void SetFrozenEffect();
+        void RemoveFrozenEffect();
         const int GetType();
         sf::Vector2f GetPosition();
         std::pair<int,int> GetCurTile();

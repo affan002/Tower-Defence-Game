@@ -16,6 +16,23 @@ Enemy::Enemy(int _type, std::string _path,std::pair<int,int> pos, int _health, f
     this->tile = pos;
 }   
 
+Enemy::Enemy(int _type, std::string _path,std::pair<int,int> pos, int _health, float _speed, float _size, int _wait, int _reward, int _dir) {
+    this->health = _health;
+    this->maxHealth = _health;
+    this->speed = _speed;
+    this->size = _size;
+    this->originalSpeed = _speed;
+
+    this->position = Vector2f(pos.first,pos.second);
+    SetSprite(_path); 
+    InitHealthBar(pos.first,pos.second);
+    wait = _wait;
+    reward = _reward;
+    type = _type;
+    this->tile = pos;
+    this->dir = _dir;
+}   
+
 
 void Enemy::SetSprite(std::string _path){
     this->texture.loadFromFile(_path);
@@ -34,43 +51,14 @@ void Enemy::Render(RenderWindow& window) {
     window.draw(this->sprite);
     window.draw(healthBar);
     window.draw(healthLeft);
-    // In the render loop
-    // window.draw(startText);
+
 }
-
-// void Enemy::Update() {
-//     position.x += xVelocity;
-//     position.y += yVelocity;
-//     distanceTraveled += (abs(xVelocity) + abs(yVelocity));
-//     this->sprite.setPosition(position);
-//     healthBar.setPosition(position.x-TILELEN/2, position.y-(TILELEN/2));
-//     healthLeft.setPosition(position.x-TILELEN/2+3, position.y-(TILELEN/2)+3);
-//     healthLeft.setSize(Vector2f((TILELEN - 6)*std::max(health,0)/maxHealth, 4));
-//     // health -= 1;
-//     // std::cout << " " <<std::to_string(relativePosition.x) << " " <<  std::to_string(relativePosition.y)<< std::endl;
-
-// }
 
 void Enemy::Update() {
     // Call the move function to determine velocities and next position
     move();
 
-    // Check if the enemy has reached the next tile
-    // if (abs(position.x - nextTile.first) < abs(xVelocity) && 
-    //     abs(position.y - nextTile.second) < abs(yVelocity)) {
-    //     position.x = nextTile.first;
-    //     position.y = nextTile.second;
-
-    //     // Reset velocity and determine the next move
-    //     xVelocity = 0;
-    //     yVelocity = 0;
-        
-        
-
-    //     // Determine the next tile and direction
-    //     // CheckDirection();
-    // }
-
+    
     // Update sprite and health bar positions
     sf::Vector2f spritePos(position.x+20,position.y+20);
     this->sprite.setPosition(spritePos);
@@ -80,284 +68,114 @@ void Enemy::Update() {
 }
 
 
-
-
-
-// void Enemy::SetPath(std::map<int ,std::vector<std::pair<int,DIRECTION>>>* _path, int startPos) {
-//     this->path = _path;
-//     this->tile = startPos;
-//     int randTile = std::rand() % ((*path)[tile].size());
-//     this->nextTile = (*path)[tile].at(randTile).first;
-//     this->dir = (*path)[tile].at(randTile).second;
-//     CheckDirection();
-
-// }
-
-// void Enemy::SetPath(std::map<int ,std::vector<std::pair<int,DIRECTION>>>* _path, int startPos,int dist) {
-//     this->path = _path;
-//     tile = startPos;
-//     this->distanceTraveled = dist;
-//     int randTile = std::rand() % ((*path)[tile].size());
-//     this->nextTile = (*path)[tile].at(randTile).first;
-//     this->dir = (*path)[tile].at(randTile).second;
-//     CheckDirection();
-// }
-
-
-// void Enemy::UpdatePath() {
-//     if (distanceTraveled >= TILELEN) {
-//         tile = nextTile;
-//         tileNr += 1;
-//         int randTile = std::rand() % ((*path)[tile].size());
-//         this->nextTile = (*path)[tile].at(randTile).first;
-//         this->dir = (*path)[tile].at(randTile).second;
-//         distanceTraveled = 0;
-//         CheckDirection();
-//     }
-//     else if (distanceTraveled + (abs(xVelocity) + abs(yVelocity)) >= TILELEN) {
-//         xVelocity = (xVelocity == 0) ? 0 : (TILELEN - distanceTraveled) * (xVelocity/abs(xVelocity));
-//         yVelocity = (yVelocity == 0) ? 0 : (TILELEN - distanceTraveled) * (yVelocity/abs(yVelocity)); 
-//     }
-   
-// }
-
-// bool Enemy::CheckEndOfPath() {
-//     if (tile == (*path)[tile].front().first) {
-//         std::cout << "reached end tile" << std::endl;
-//         return true;
-//     }   
-//     return false;
-// }
-
-
-// void Enemy::move(){
-    
-//     if (levelMap[tile.second/TILELEN][tile.first/TILELEN + 1])
-//         this->nextTile = getPos(tile.second/TILELEN,tile.first/TILELEN + 1);
-//     // this->distanceTraveled = dist;
-//     CheckDirection();
-// }
-
-
-
 void Enemy::move() {
-
-    std::string s2;
+    std::string s;
     // Determine current grid position
     int curGridX = position.x / TILE_SIZE;
     int curGridY = position.y / TILE_SIZE;
-    
-    // if (change){
-    //     change = false;
-        if (change){
-        for (int i = 0; i < 1; i++){
-        if (dir == DOWN || dir == UP || dir == IDLE){
 
-        // if (levelMap[tile.second/TILELEN -1][tile.first/TILELEN ] == 1){
-        //     if (dir == UP){
-        //         dir = UP;
-        //         s2 = "UP";
-        //         break;
-        //     }
-        // }
-
-        if (levelMap[tile.second/TILELEN][tile.first/TILELEN + 1] == 1){
-            if (dir != LEFT){
+    // If the direction needs to change, handle the update
+    if (change) {
+        
+        if (dir == UP || dir == DOWN || dir == IDLE) {
+            if (levelMap[tile.second / TILELEN][tile.first / TILELEN + 1] == 1) {
                 dir = RIGHT;
-                s2 = "RIGHT";
-                break;
-            }
-        }
-        
-        if (levelMap[tile.second/TILELEN][tile.first/TILELEN-1] == 1){
-            if (dir != RIGHT){
+                sprite.setRotation(90);
+                change = false;  // No need to change direction again until next cycle
+            } else if (levelMap[tile.second / TILELEN][tile.first / TILELEN - 1] == 1) {
+                
                 dir = LEFT;
-                s2 = "LEFT";
-                break;
+                sprite.setRotation(270);
+                change = false;
             }
+            
+            // break;
         }
-        }
-        
-        if (dir == LEFT || dir == RIGHT || dir == IDLE) {
 
-        // if (levelMap[tile.second/TILELEN][tile.first/TILELEN-1] == 1){
-        //     if (dir != RIGHT){
-        //         dir = LEFT;
-        //         s2 = "LEFT";
-        //         break;
-        //     }
-        // }
-        if (levelMap[tile.second/TILELEN+1][tile.first/TILELEN] == 1){
-            if (dir != UP){
+        else if (dir == LEFT || dir == RIGHT || dir == IDLE) {
+                
+            if (levelMap[tile.second / TILELEN + 1][tile.first / TILELEN] == 1) {
                 dir = DOWN;
-                s2 = "DOWN";
-                break;
-            }
-        }
-        if (levelMap[tile.second/TILELEN-1][tile.first/TILELEN] == 1){
-            if (dir != DOWN){
+                sprite.setRotation(180);
+                change = false;
+            } else if (levelMap[tile.second / TILELEN - 1][tile.first / TILELEN] == 1) {
                 dir = UP;
-                s2 = "UP";
-                break;
+                sprite.setRotation(0);
+                change = false;
             }
-        }
-        }
-        //change = false;
-        }
-        change = false;
-        // }
-        
-    }
 
-    std::string s;
-    // Determine the next grid position based on direction
+        }    
+    }
+    // Handle movement in the new direction
+    
     switch (dir) {
-        
         case RIGHT:
-            if (levelMap[curGridY][curGridX + 1] == 1  ) {
+            if (levelMap[curGridY][curGridX + 1] == 1) {
+                
                 nextTile = getPos(curGridY, curGridX + 1);
-                this->sprite.setRotation(90);
                 s = "RIGHT";
             }
             break;
         case LEFT:
-            if (levelMap[curGridY][curGridX - 1] == 1 ) {
+            if (levelMap[curGridY][curGridX - 1] == 1) {
+                
                 nextTile = getPos(curGridY, curGridX - 1);
-                this->sprite.setRotation(270);
                 s = "LEFT";
             }
             break;
         case UP:
-            if (levelMap[curGridY - 1][curGridX] == 1 ) {
+            if (levelMap[curGridY - 1][curGridX] == 1) {
+                
                 nextTile = getPos(curGridY - 1, curGridX);
-                this->sprite.setRotation(0);
-               s = "UP"; 
+                s = "UP";
             }
-            
             break;
         case DOWN:
-            if (levelMap[curGridY + 1][curGridX] == 1 ) {
+            if (levelMap[curGridY + 1][curGridX] == 1) {
+                
                 nextTile = getPos(curGridY + 1, curGridX);
-                this->sprite.setRotation(180);
                 s = "DOWN";
             }
             break;
         case IDLE:
-            // No movement
-            return;
+            s = "IDLE";
+            break; // No movement
+        default:
+            s = "DEFAULT";
+            break;
     }
-
-    
 
     // Calculate velocity to move towards the next tile
-    double m = sqrt(pow(nextTile.first-position.x,2) + pow(nextTile.second - position.y, 2));
-    // speed = 0.5;
-    xVelocity = (nextTile.first - position.x) * speed / m;
-    yVelocity = (nextTile.second - position.y) * speed / m;
+    float dx = nextTile.first - position.x;
+    float dy = nextTile.second - position.y;
+    float distance = sqrt(dx * dx + dy * dy);
+    xVelocity = (dx / distance) * speed;
+    yVelocity = (dy / distance) * speed;
 
-        this->startFont.loadFromFile("fonts/upheavtt.ttf");
-        this->startText.setFont(this->startFont);
-        this->startText.setString(s + "   "  +std::to_string(tile.first) + "   " + std::to_string(tile.second) + "    " + std::to_string(position.x) + "    "  + std::to_string(position.y));
-        this->startText.setFillColor(Color::Black);
-        this->startText.setCharacterSize(20);
-        this->startText.setPosition(20,20);
-    
-    // Update the position based on calculated velocity
+    // Update position based on velocity
     position.x += xVelocity;
     position.y += yVelocity;
+    
 
-
+    // After moving, check if the position has reached the target grid cell
+    if (fabs(position.x - nextTile.first) < 1.0f && fabs(position.y - nextTile.second) < 1.0f) {
+        // Snap to grid to avoid floating-point drift
+        position.x = nextTile.first;
+        position.y = nextTile.second;
+        change = true;  // Allow direction change for the next move
+    }
+    // After moving, check if the position has passed the grid boundary
     int curGridXNew = position.x / TILE_SIZE;
     int curGridYNew = position.y / TILE_SIZE;
-    
-    if (curGridX != curGridXNew || curGridY != curGridYNew){
+
+    if (curGridX != curGridXNew || curGridY != curGridYNew) {
+        
         tile = nextTile;
-        change = true;
+        change = true;  // Mark for next direction update
     }
-    
 
-    // this->tile = nextTile;
-    // Check if the enemy has reached the next tile
-    // if (abs(position.x - nextTile.first) < abs(xVelocity) && 
-    //     abs(position.y - nextTile.second) < abs(yVelocity)) {
-    //     // Snap to the next tile
-    //     position.x = nextTile.first;
-    //     position.y = nextTile.second;
 
-    //     // Update the tile to reflect the grid position
-    //     tile = std::make_pair(nextTile.second / TILE_SIZE, nextTile.first / TILE_SIZE);
-    // }
 }
-
-
-
-// void Enemy::move() {
-//     int curGridX = position.x / TILE_SIZE;
-//     int curGridY = position.y / TILE_SIZE;
-
-//     // Update direction based on level map
-//     if (change) {
-//         if (levelMap[tile.second / TILELEN][tile.first / TILELEN + 1] == 1 && dir != LEFT) {
-//             dir = RIGHT;
-//             change = false;
-//         } else if (levelMap[tile.second / TILELEN][tile.first / TILELEN - 1] == 1 && dir != RIGHT) {
-//             dir = LEFT;
-//             change = false;
-//         }  else if (levelMap[tile.second / TILELEN + 1][tile.first / TILELEN] == 1 && dir != UP) {
-//             dir = DOWN;
-//             change = false;
-//         } else if (levelMap[tile.second / TILELEN - 1][tile.first / TILELEN] == 1 && dir != DOWN) {
-//             dir = UP;
-//             change = false;
-//         }
-//     }
-
-//     // Calculate next tile and velocity
-//     switch (dir) {
-//         case RIGHT:
-//             nextTile = getPos(curGridY, curGridX + 1);
-//             sprite.setRotation(90);
-//             break;
-//         case LEFT:
-//             nextTile = getPos(curGridY, curGridX - 1);
-//             sprite.setRotation(270);
-//             break;
-//         case UP:
-//             nextTile = getPos(curGridY - 1, curGridX);
-//             sprite.setRotation(0);
-//             break;
-//         case DOWN:
-//             nextTile = getPos(curGridY + 1, curGridX);
-//             sprite.setRotation(180);
-//             break;
-//         case IDLE:
-//             return;
-//     }
-
-//     // Calculate velocity
-//     float dx = nextTile.first - position.x;
-//     float dy = nextTile.second - position.y;
-//     float distance = sqrt(dx * dx + dy * dy);
-//     xVelocity = (dx / distance) * speed;
-//     yVelocity = (dy / distance) * speed;
-
-//     // Update position
-//     position.x += xVelocity;
-//     position.y += yVelocity;
-
-//     // Snap to next tile if close enough
-//     if (fabs(position.x - nextTile.first) < 0.5f && fabs(position.y - nextTile.second) < 0.5f) {
-//         position = { static_cast<float>(nextTile.first), static_cast<float>(nextTile.second) };
-
-//         tile = nextTile;
-//         change = true;
-//     }
-// }
-
-
-
-
-
 
 
 void Enemy::InitHealthBar(float x, float y) {
@@ -369,31 +187,13 @@ void Enemy::InitHealthBar(float x, float y) {
     healthLeft.setFillColor(Color::Red);
 }
 
-// void Enemy::CheckDirection() {
-    // switch (dir) {
-    //     case UP:
-    //         yVelocity = 0-speed;
-    //         xVelocity = 0;
-    //         break;
-    //     case DOWN:
-    //         yVelocity = speed;
-    //         xVelocity = 0;
-    //         break;
-    //     case LEFT:
-    //         xVelocity = 0-speed;
-    //         yVelocity = 0;
-    //         break;
-    //     case RIGHT:
-    //         xVelocity = speed;
-    //         yVelocity = 0;
-    //         break;
-    //     case IDLE:
-    //         xVelocity = 0;
-    //         yVelocity = 0;
-    //         break;
-    //     }
-    
-// }
+void Enemy::setDir(int dir){
+    this->dir = dir;
+}
+
+int Enemy::getDir(){
+    return this->dir;
+}
 
 int Enemy::GetWait(){
     return wait;
@@ -429,7 +229,13 @@ void Enemy::setSpeed(float newSpeed){
 float Enemy::getOriginalSpeed(){
     return this->originalSpeed;
 }
+void Enemy::SetFrozenEffect(){
+    sprite.setColor(sf::Color(0,191,255));
+}
 
+void Enemy::RemoveFrozenEffect(){
+    sprite.setColor(sf::Color(255,255,255));
+}
 const int Enemy::GetType() {
     return type;
 }

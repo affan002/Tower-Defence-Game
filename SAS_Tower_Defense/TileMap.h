@@ -27,13 +27,13 @@ private:
     std::pair<int, int> endPos;
     sf::Font endFont;
     sf::Text endText;
-    std::vector<Enemy*> enemies; // waves
-    // std::vector<waves*>  waves;
-
+    // std::vector<Enemy*> enemies; // waves
+    
     std::vector<Wave*> waves;
 
     sf::RectangleShape whiteSpace;
-
+    bool quit = false;
+    bool win = false;
 public:
     TileMap() {
         
@@ -73,8 +73,8 @@ public:
         this->waves.push_back(new Wave("Wave 4" , 0,5,5,5,0, startPos, player));
         this->waves.push_back(new Wave("Wave 5" , 0,0,0,0,2, startPos, player));
 
-        enemies.push_back(new Enemy(1, "images/ship1.png", startPos, 100, 0.5, 80, 4, 25)); // waves
-        // e = new Enemy(1,"images/ship1.png", startPos, 100, 0.5, 80, 4, 25);
+        // enemies.push_back(new Enemy(1, "images/ship1.png", startPos, 100, 1.5, 80, 4, 25)); // waves
+        // enemies.push_back(new Enemy(1, "images/ship1.png", startPos, 100, 1.5, 80, 4, 25));
     }
 
     ~TileMap(){
@@ -83,49 +83,54 @@ public:
         for(auto i: waves){
         delete i;
         }
-        for (Enemy* enemy : enemies) {
-        delete enemy; // waves destructor
-    }
-    enemies.clear();
-    }
-
-    // void update(){
-        
-    //     e->Update();
-    //     std::pair<int, int> curTile = e->GetCurTile();
-
-    //     if (curTile == getEndPos()){
-            
-    //         player->health -=1;
-    //     }
-    //     player->Update();
+    // for (Enemy* enemy : enemies) {
+    //     delete enemy; // waves destructor
     // }
+    // enemies.clear();
+    }
+
     void update() {
-    for (auto it = enemies.begin(); it != enemies.end();) {
-        Enemy* enemy = *it;
+    // for (auto it = enemies.begin(); it != enemies.end();) {
+    //     Enemy* enemy = *it;
 
-        enemy->Update(); // Update each enemy (waves)
+    //     enemy->Update(); // Update each enemy (waves)
 
-        // Check if the enemy reached the end position
-        if (enemy->GetCurTile() == getEndPos()) { // waves
-            player->health -= 1; // Deduct health
-            delete enemy;        // Free memory
-            it = enemies.erase(it); // Remove enemy from the list
-        } else {
-            ++it; // Move to the next enemy
+    //     // Check if the enemy reached the end position
+    //     if (enemy->GetCurTile() == getEndPos()) { // waves
+    //         player->health -= 1; // Deduct health
+    //         delete enemy;        // Free memory
+    //         enemies.erase(it); // Remove enemy from the list
+            
+
+    //     } else {
+    //         ++it; // Move to the next enemy
+    //     }
+    // }
+
+        if  (!waves.empty()) {
+            (waves.front())->Update();
+            if ((waves.front())->HasEnded()){
+                waves.front()->~Wave();
+                waves.erase(waves.begin());
+            }
+        }
+        else{
+            win = true;
+        }
+
+        player->Update(); // Update player logic
+        if (player->health < 1){
+            quit = true;
         }
     }
 
-    // if  (!waves.empty()) {
-    //     (waves.front())->Update();
-    //     if ((waves.front())->HasEnded()){
-    //         waves.front()->~Wave();
-    //         waves.erase(waves.begin());
-    //     }
-    // }
+    bool getQuit(){
+        return quit;
+    }
 
-    player->Update(); // Update player logic
-}
+    bool getWin(){
+        return win;
+    }
    
 
     void draw(sf::RenderWindow& window) {
@@ -149,12 +154,12 @@ public:
         window.draw(this->startText);
         window.draw(this->endText);
         
-        // e->Render(window);
+       
 
             // Draw all enemies
-        for (Enemy* enemy : enemies) {
-            enemy->Render(window);   // waves
-        }
+        // for (Enemy* enemy : enemies) {
+        //     enemy->Render(window);   // waves
+        // }
 
         if  (!waves.empty()) {
             (waves.front())->Render(window);
