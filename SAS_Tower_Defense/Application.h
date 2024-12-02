@@ -78,7 +78,7 @@ private:
 
     void update() {
         if (currentState == "GAME"){
-            tileMap.update();
+            tileMap.update(window);
         }
         if (currentState == "GAME" && tileMap.getQuit()){
             currentState = "END";

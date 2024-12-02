@@ -8,6 +8,8 @@
 // #include "enemy.cpp"
 // #include "wave.h"
 #include "wave.cpp"
+#include "tower.cpp"
+#include "guntower.cpp"
 // #include "Player.h"
 
 class TileMap {
@@ -34,6 +36,52 @@ private:
     sf::RectangleShape whiteSpace;
     bool quit = false;
     bool win = false;
+
+    std::vector<Tower*> towers;
+    
+
+    // for tower 1 gun tower
+    sf::Texture t1;
+    sf::Sprite tower1;
+    bool isPressed1 = false;
+    int t1Cost;
+
+    // For tower 2 freeze tower
+    sf::Texture t2;
+    sf::Sprite tower2;
+    bool isPressed2 = false;
+    int t2Cost;
+
+    // For Bazooka tower
+    sf::Texture t3;
+    sf::Sprite tower3;
+    bool isPressed3 = false;
+    int t3Cost;
+
+    // For Boat 
+    sf::Texture t4;
+    sf::Sprite tower4;
+    bool isPressed4 = false;
+    int t4Cost;
+    
+
+
+    //Debugging
+    sf::Font debugFont;
+    sf::Text debugText;
+
+    // Dragging
+    
+    sf::Texture d;
+    sf::Sprite drag;
+   
+   // Dropping
+
+
+    // buttons
+    std::map<std::string, Button*> buttons; 
+    Font titleFont;
+    Font font;
 public:
     TileMap() {
         
@@ -75,6 +123,45 @@ public:
 
         // enemies.push_back(new Enemy(1, "images/ship1.png", startPos, 100, 1.5, 80, 4, 25)); // waves
         // enemies.push_back(new Enemy(1, "images/ship1.png", startPos, 100, 1.5, 80, 4, 25));
+
+
+        if(!this->t1.loadFromFile("images/tower1.png")){
+        std::cout << "nope" << std::endl;
+    }
+    this->tower1.setTexture(t1);
+    this->tower1.setPosition(920, 300);
+    this->t1Cost=100;
+
+    // for tower 2 freeze_tower
+    if(!this->t2.loadFromFile("images/tower2.png")){
+        std::cout << "nope" << std::endl;
+    }
+    this->tower2.setTexture(t2);
+    this->tower2.setPosition(1100, 300);
+    this->tower2.scale(sf::Vector2f(0.7,0.7));
+    this->t2Cost=200;
+
+    // for tower 3 bazooka_tower
+    if(!this->t3.loadFromFile("images/tower3.png")){
+        std::cout << "nope" << std::endl;
+    }
+    this->tower3.setTexture(t3);
+    this->tower3.setPosition(930, 500);
+    this->tower3.scale(sf::Vector2f(0.778,0.778));
+    this->t3Cost=300;
+
+    // for tower 4 boat
+    if(!this->t4.loadFromFile("images/tower4.png")){
+        std::cout << "nope" << std::endl;
+    }
+    this->tower4.setTexture(t4);
+    this->tower4.setPosition(1100, 500);
+    this->tower4.scale(sf::Vector2f(0.778,0.778));
+    this->t4Cost=350;
+
+
+    this->titleFont.loadFromFile("fonts/Robus.otf");
+    this->font.loadFromFile("fonts/upheavtt.ttf");
     }
 
     ~TileMap(){
@@ -89,7 +176,7 @@ public:
     // enemies.clear();
     }
 
-    void update() {
+    void update(sf::RenderWindow& window) {
     // for (auto it = enemies.begin(); it != enemies.end();) {
     //     Enemy* enemy = *it;
 
@@ -122,6 +209,8 @@ public:
         if (player->health < 1){
             quit = true;
         }
+        updateDrag(window);
+        renderDrag(window);
     }
 
     bool getQuit(){
@@ -153,6 +242,7 @@ public:
 
         window.draw(this->startText);
         window.draw(this->endText);
+        window.draw(this->debugText);
         
        
 
@@ -165,8 +255,134 @@ public:
             (waves.front())->Render(window);
         }
         window.draw(whiteSpace);
-        
+         window.draw(this->tower1);
+        window.draw(this->tower2);
+        window.draw(this->tower3);
+        window.draw(this->tower4);
         player->draw(window);
 
     }
+    void updateDrag(sf::RenderWindow& window) {
+    // Get mouse position in window coordinates
+    sf::Vector2i mousePosWorld = sf::Mouse::getPosition(window);
+    sf::Vector2f mousePosView = window.mapPixelToCoords(mousePosWorld);
+    
+
+    // Button pressed event handling
+    sf::Event event;
+    while (window.pollEvent(event)) {
+        switch (event.type) {
+        case sf::Event::MouseButtonPressed:
+            // Check if any of the towers is clicked
+            if (tower1.getGlobalBounds().contains(mousePosView) && sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+                this->isPressed1 = true;
+                
+                
+            }
+            if (tower2.getGlobalBounds().contains(mousePosView) && sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+                this->isPressed2 = true;
+            }
+            if (tower3.getGlobalBounds().contains(mousePosView) && sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+                this->isPressed3 = true;
+            }
+            if (tower4.getGlobalBounds().contains(mousePosView) && sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+                this->isPressed4 = true;
+            }
+           
+            break;
+            
+
+        case sf::Event::MouseButtonReleased:
+            // Check if a tower is placed within bounds
+            if (isPressed1 && mousePosView.x < 720 && mousePosView.y < 720) {
+                int x = static_cast<int>(mousePosView.x) / 48;  // Ensure it's an integer division
+                int y = static_cast<int>(mousePosView.y) / 48;
+
+                // Ensure x and y are within valid bounds
+                if (x >= 0 && y >= 0 && x < 15 && y < 15) {  // Assuming 15x15 grid
+                    this->towers.push_back(new GunTower("images/tower1.png", sf::Vector2f(x * 48, y * 48), sf::Vector2f(0.6, 0.6)));
+                }
+            }
+
+            if (isPressed2 && mousePosView.x < 720 && mousePosView.y < 720) {
+                int x = static_cast<int>(mousePosView.x) / 48;
+                int y = static_cast<int>(mousePosView.y) / 48;
+
+                if (x >= 0 && y >= 0 && x < 15 && y < 15) {
+                    this->towers.push_back(new GunTower("images/tower2.png", sf::Vector2f(x * 48, y * 48), sf::Vector2f(0.6, 0.6)));
+                }
+            }
+
+            if (isPressed3 && mousePosView.x < 720 && mousePosView.y < 720) {
+                int x = static_cast<int>(mousePosView.x) / 48;
+                int y = static_cast<int>(mousePosView.y) / 48;
+
+                if (x >= 0 && y >= 0 && x < 15 && y < 15) {
+                    this->towers.push_back(new GunTower("images/tower3.png", sf::Vector2f(x * 48, y * 48), sf::Vector2f(0.6, 0.6)));
+                }
+            }
+
+            if (isPressed4 && mousePosView.x < 720 && mousePosView.y < 720) {
+                int x = static_cast<int>(mousePosView.x) / 48;
+                int y = static_cast<int>(mousePosView.y) / 48;
+
+                if (x >= 0 && y >= 0 && x < 15 && y < 15) {
+                    this->towers.push_back(new GunTower("images/tower4.png", sf::Vector2f(x * 48, y * 48), sf::Vector2f(0.6, 0.6)));
+                }
+            }
+            // Reset the pressed flags
+            // else{
+                isPressed1 = false;
+                isPressed2 = false;
+                isPressed3 = false;
+                isPressed4 = false;
+            // }
+            break;
+
+        default:
+            break;
+        }
+    }
+     
+if(this->isPressed1 || this->isPressed2 || this->isPressed3|| this->isPressed4){
+        if(this->tower1.getGlobalBounds().contains(mousePosView)){
+            drag.setTexture(*this->tower1.getTexture());
+        }
+        if(this->tower2.getGlobalBounds().contains(mousePosView)){
+            drag.setTexture(*this->tower2.getTexture());
+        }
+        if(this->tower3.getGlobalBounds().contains(mousePosView)){
+            drag.setTexture(*this->tower3.getTexture());
+        }
+        if(this->tower4.getGlobalBounds().contains(mousePosView)){
+            drag.setTexture(*this->tower4.getTexture());
+        }
+        drag.setPosition(mousePosView.x, mousePosView.y);
+        drag.setOrigin(sf::Vector2f(80 ,80));
+    }
+    
+}
+
+
+
+
+
+
+void renderDrag(sf::RenderWindow& window){
+    std::string str = (isPressed1 ? "true1" : "false1");
+            std::string str2 = (isPressed2 ? "true2" : "false2");
+            std::string str3 = (isPressed3 ? "true3" : "false3");
+            std::string str4 = (isPressed4 ? "true4" : "false4");
+            debugFont.loadFromFile("fonts/upheavtt.ttf");
+            debugText.setFont(startFont);
+            debugText.setString(str
+             + "    "+str2 +"    "+ str3 +"    "+str4
+            );
+            debugText.setFillColor(Color::Black);
+            debugText.setCharacterSize(20);
+            debugText.setPosition(20, 200);
+    if(this->isPressed1 || isPressed2 || isPressed3 || isPressed4){
+        window.draw(drag);
+    }
+}
 };
