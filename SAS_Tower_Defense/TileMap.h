@@ -10,6 +10,7 @@
 #include "wave.cpp"
 #include "tower.cpp"
 #include "guntower.cpp"
+#include "Button.cpp"
 // #include "Player.h"
 
 class TileMap {
@@ -82,6 +83,12 @@ private:
     std::map<std::string, Button*> buttons; 
     Font titleFont;
     Font font;
+   
+    Vector2i mousePosScreen;
+    Vector2i mousePosWindow;
+    Vector2f mousePosView;
+   
+
 public:
     TileMap() {
         
@@ -162,6 +169,9 @@ public:
 
     this->titleFont.loadFromFile("fonts/Robus.otf");
     this->font.loadFromFile("fonts/upheavtt.ttf");
+
+    this->initButtons();
+    drag.scale(sf::Vector2f(0.6,0.6));
     }
 
     ~TileMap(){
@@ -211,6 +221,7 @@ public:
         }
         updateDrag(window);
         renderDrag(window);
+        updateMousePositions(window);
     }
 
     bool getQuit(){
@@ -263,9 +274,6 @@ public:
 
     }
     void updateDrag(sf::RenderWindow& window) {
-    // Get mouse position in window coordinates
-    sf::Vector2i mousePosWorld = sf::Mouse::getPosition(window);
-    sf::Vector2f mousePosView = window.mapPixelToCoords(mousePosWorld);
     
 
     // Button pressed event handling
@@ -384,5 +392,17 @@ void renderDrag(sf::RenderWindow& window){
     if(this->isPressed1 || isPressed2 || isPressed3 || isPressed4){
         window.draw(drag);
     }
+}
+void initButtons(){
+    
+    this->buttons["tower1"] = new Button(920, 300, 100, 50, "100");
+    this->buttons["tower2"] = new Button(940, 300, 100, 50, "200");
+    this->buttons["tower3"] = new Button(1100, 500, 100, 50, "300");
+    this->buttons["tower4"] = new Button(1100, 500, 100, 50, "350");
+}
+void updateMousePositions(sf::RenderWindow& window){
+    this->mousePosScreen = sf::Mouse::getPosition();
+    this->mousePosWindow = sf::Mouse::getPosition(window);
+    this->mousePosView = window.mapPixelToCoords(sf::Mouse::getPosition(window));
 }
 };
