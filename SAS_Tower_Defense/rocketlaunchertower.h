@@ -1,11 +1,13 @@
-#ifndef GUN_TOWER_HPP
-#define GUN_TOWER_HPP
+#ifndef BAZOOKA_TOWER_HPP
+#define BAZOOKA_TOWER_HPP
+
 
 #include "tower.h"
-#include "bullet.cpp"
+#include "bullet.h"
 #include "enemy.h"
 
-class GunTower: public Tower
+
+class RocketLauncherTower: public Tower
 {
 private:
     sf::Texture texture;
@@ -18,14 +20,15 @@ private:
     bool isSomeEmemy;
 
     Bullet *bullet;
+    float bulletRange;
 
     float wait = 0;
 
     bool isHit = false;   
 
 public:
-    GunTower(std::string _path, sf::Vector2f pos, sf::Vector2f resize);
-    ~GunTower();
+    RocketLauncherTower(std::string _path, sf::Vector2f pos, sf::Vector2f resize);
+    ~RocketLauncherTower();
 
 
     void Update(const sf::Vector2f mousePos, const float& dt);
@@ -35,12 +38,6 @@ public:
 
     void collisionDetect(std::vector<Enemy*> enemies, float dt);
 };
-
-
-
-
-
-
 
 
 

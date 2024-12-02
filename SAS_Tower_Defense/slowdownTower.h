@@ -1,11 +1,13 @@
-#ifndef GUN_TOWER_HPP
-#define GUN_TOWER_HPP
+#ifndef FREEZE_TOWER_HPP
+#define FREEZE_TOWER_HPP
+
 
 #include "tower.h"
-#include "bullet.cpp"
+#include "bullet.h"
 #include "enemy.h"
 
-class GunTower: public Tower
+
+class SlowDownTower: public Tower
 {
 private:
     sf::Texture texture;
@@ -17,15 +19,16 @@ private:
     sf::Vector2f targetEmeny;
     bool isSomeEmemy;
 
-    Bullet *bullet;
 
     float wait = 0;
 
-    bool isHit = false;   
+    bool isHit = false;
+    // slows down enemy 
+    float speedMulti = 0.1;   
 
 public:
-    GunTower(std::string _path, sf::Vector2f pos, sf::Vector2f resize);
-    ~GunTower();
+    SlowDownTower(std::string _path, sf::Vector2f pos, sf::Vector2f resize);
+    ~SlowDownTower();
 
 
     void Update(const sf::Vector2f mousePos, const float& dt);
@@ -35,11 +38,6 @@ public:
 
     void collisionDetect(std::vector<Enemy*> enemies, float dt);
 };
-
-
-
-
-
 
 
 

@@ -11,6 +11,7 @@
 #include "tower.cpp"
 #include "guntower.cpp"
 #include "Button.cpp"
+#include "rocketlaunchertower.cpp"
 // #include "Player.h"
 
 class TileMap {
@@ -159,7 +160,7 @@ public:
         std::cout << "nope" << std::endl;
     }
     this->tower3.setTexture(t3);
-    this->tower3.setPosition(930, 500);
+    this->tower3.setPosition(920, 500);
     this->tower3.scale(sf::Vector2f(0.778,0.778));
     this->t3Cost=300;
 
@@ -176,7 +177,6 @@ public:
     this->titleFont.loadFromFile("fonts/Robus.otf");
     this->font.loadFromFile("fonts/upheavtt.ttf");
 
-    this->initButtons();
     drag.scale(sf::Vector2f(0.6,0.6));
 
 
@@ -194,7 +194,7 @@ public:
     // enemies.clear();
     }
 
-    void update(sf::RenderWindow& window) {
+    void update(sf::RenderWindow& window,float dt) {
     // for (auto it = enemies.begin(); it != enemies.end();) {
     //     Enemy* enemy = *it;
 
@@ -215,9 +215,7 @@ public:
     GunTower g("images/tower1.png", sf::Vector2f(48,48), sf::Vector2f(0.6, 0.6));
     
 
-    updateDrag(window);
-        
-        updateMousePositions(window);
+    
 
         if  (!waves.empty()) {
             (waves.front())->Update();
@@ -236,11 +234,21 @@ public:
         }
 
         for(auto i: towers){
-        i->Update(this->mousePosView);
+        i->Update(this->mousePosView,dt);
+        std::vector<Enemy*> rawEnemies;
+        for (auto& enemyPtr : waves.front()->getCurEnemies()) {
+        rawEnemies.push_back(enemyPtr.get());  // Use get() to get raw pointer
+        }
+        i->enemieInRange(rawEnemies);
+
+        // i->enemieInRange(waves.front()->getCurEnemies());
+        i->collisionDetect(rawEnemies,dt);
         //i->rotate(sf::Vector2i(this->enemies[0]->GetSprite().getPosition().x,this->enemies[0]->GetSprite().getPosition().y), this->enemies[0]->GetSprite().getPosition());
-        
-        
+
     }
+    updateDrag(window);
+        
+        updateMousePositions(window);
         
     }
 
@@ -335,6 +343,7 @@ public:
                 // Ensure x and y are within valid bounds
                 if (x >= 0 && y >= 0 && x < 15 && y < 15) {  // Assuming 15x15 grid
                     this->towers.push_back(new GunTower("images/tower1.png", sf::Vector2f(x * 48, y * 48), sf::Vector2f(0.6, 0.6)));
+                player->coins-=100;
                 }
             }
 
@@ -343,7 +352,8 @@ public:
                 int y = static_cast<int>(mousePosView.y) / 48;
 
                 if (x >= 0 && y >= 0 && x < 15 && y < 15) {
-                    this->towers.push_back(new GunTower("images/tower2.png", sf::Vector2f(x * 48, y * 48), sf::Vector2f(0.6, 0.6)));
+                    this->towers.push_back(new RocketLauncherTower("images/tower2.png", sf::Vector2f(x * 48, y * 48), sf::Vector2f(0.6, 0.6)));
+                player->coins-=200;
                 }
             }
 
@@ -353,6 +363,7 @@ public:
 
                 if (x >= 0 && y >= 0 && x < 15 && y < 15) {
                     this->towers.push_back(new GunTower("images/tower3.png", sf::Vector2f(x * 48, y * 48), sf::Vector2f(0.6, 0.6)));
+                player->coins-=150;
                 }
             }
 
@@ -362,6 +373,7 @@ public:
 
                 if (x >= 0 && y >= 0 && x < 15 && y < 15) {
                     this->towers.push_back(new GunTower("images/tower4.png", sf::Vector2f(x * 48, y * 48), sf::Vector2f(0.6, 0.6)));
+                    player->coins-=100;
                 }
             }
             // Reset the pressed flags
@@ -433,13 +445,7 @@ void renderDrag(sf::RenderWindow& window){
         window.draw(drag);
     }
 } 
-void initButtons(){
-    
-    this->buttons["tower1"] = new Button(920, 300, 100, 50, "100");
-    this->buttons["tower2"] = new Button(940, 300, 100, 50, "200");
-    this->buttons["tower3"] = new Button(1100, 500, 100, 50, "300");
-    this->buttons["tower4"] = new Button(1100, 500, 100, 50, "350");
-}
+
 void updateMousePositions(sf::RenderWindow& window){
     this->mousePosScreen = sf::Mouse::getPosition();
     this->mousePosWindow = sf::Mouse::getPosition(window);
