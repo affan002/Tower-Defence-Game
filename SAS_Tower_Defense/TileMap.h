@@ -115,7 +115,7 @@ public:
         this->endText.setPosition(this->endPos.first,this->endPos.second+5);
 
         std::srand(std::time(nullptr));
-        this->waves.push_back(new Wave("Wave 1" , 5,0,0,0,0, startPos, player));
+        this->waves.push_back(new Wave("Wave 1" , 0,2,0,0,1, startPos, player));
         this->waves.push_back(new Wave("Wave 2" , 10,5,0,0,0, startPos, player));
         this->waves.push_back(new Wave("Wave 3" , 5,0,5,0,0, startPos, player));
         this->waves.push_back(new Wave("Wave 4" , 0,5,5,5,0, startPos, player));
@@ -207,7 +207,7 @@ public:
 
         player->Update(); // Update player logic
         if (player->health < 1){
-            quit = true;
+            // quit = true;
         }
         updateDrag(window);
         renderDrag(window);
@@ -380,7 +380,7 @@ void renderDrag(sf::RenderWindow& window){
             );
             debugText.setFillColor(Color::Black);
             debugText.setCharacterSize(20);
-            debugText.setPosition(20, 200);
+            debugText.setPosition(20, 400);
     if(this->isPressed1 || isPressed2 || isPressed3 || isPressed4){
         window.draw(drag);
     }

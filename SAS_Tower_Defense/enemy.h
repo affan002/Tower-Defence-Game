@@ -78,6 +78,7 @@ class Enemy {
         const int GetType();
         sf::Vector2f GetPosition();
         std::pair<int,int> GetCurTile();
+        std::pair<int,int> GetNextTile();
         int GetDist();
 };
 

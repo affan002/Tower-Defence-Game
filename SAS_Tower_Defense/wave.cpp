@@ -10,28 +10,28 @@ Wave::Wave(std::string _name, int e1, int e2, int e3, int e4, int e5, std::pair<
     for (size_t i = e5; i > 0; i--)
     {
         // enemiesWaitlist.push_back(new Enemy(5,"images/ship5.png", startPos, 5000, 0.20, 180, 40*(i-1), 500));   
-        enemiesWaitlist.push_back(std::make_unique<Enemy>(5, "images/ship5.png", startPos, 5000, 0.50, 180, 40*(i-1), 500));
+        enemiesWaitlist.push_back(std::make_unique<Enemy>(5, "images/ship5.png", startPos, 2000, 0.20, 180, 40*(i-1), 500));
    
     }
     //enemy type 4  200 health   1 speed  110 size 150 coins
     for (size_t i = 0; i < e4; i++)
     {
-        enemiesWaitlist.push_back(std::make_unique<Enemy>(4,"images/ship4.png", startPos, 200, 1.5, 110, 2, 150));      
+        enemiesWaitlist.push_back(std::make_unique<Enemy>(4,"images/ship4.png", startPos, 200, 0.8, 110, 2, 150));      
     }
     //enemy type 3  200 health   1.5 speed  100 size 100 coins
     for (size_t i = 0; i < e3; i++)
     {
-        enemiesWaitlist.push_back(std::make_unique<Enemy>(3,"images/ship3.png", startPos, 200, 1, 100, 2, 100));      
+        enemiesWaitlist.push_back(std::make_unique<Enemy>(3,"images/ship3.png", startPos, 200, 0.5, 100, 2, 100));      
     }
     //enemy  type 2 50 health   2 speed  80 size 50 coins
     for (size_t i = 0; i < e2; i++)
     {
-        enemiesWaitlist.push_back(std::make_unique<Enemy>(2,"images/ship2.png", startPos, 50, 2, 80, 2, 50));      
+        enemiesWaitlist.push_back(std::make_unique<Enemy>(2,"images/ship2.png", startPos, 50, 1.2, 80, 2, 50));      
     }
     //enem type 1  100 health   1 speed  80 size 25 coins
     for (size_t i = 0; i < e1; i++)
     {
-        enemiesWaitlist.push_back(std::make_unique<Enemy>(1,"images/ship1.png",startPos, 100, 1, 80, 2, 25));      
+        enemiesWaitlist.push_back(std::make_unique<Enemy>(1,"images/ship1.png",startPos, 100, 0.5, 80, 2, 25));      
     }
     // enemies.push_back(std::make_unique<Enemy>(1,"images/ship1.png",startPos, 100, 1, 80, 2, 25));
 
@@ -66,7 +66,7 @@ void Wave::Update() {
         Enemy* enemy = it->get();  // Access the enemy via the unique pointer
 
         // if (testClock.getElapsedTime().asSeconds() >= 1){
-        //     enemy->health -= 60;
+        //     enemy->health -= 190;
         //     testClock.restart();
         // }
 
@@ -87,29 +87,36 @@ void Wave::Update() {
                 case 5: // Spawn smaller enemies (type 3)
                     
                     for (int j = 0; j < 3; j++) {
-                        std::unique_ptr<Enemy> e = std::make_unique<Enemy>(
-                            3, "images/ship3.png", enemy->GetCurTile(), 
-                            200, 1, 100, 0.4, 100,dir);
+                        // std::unique_ptr<Enemy> e = std::make_unique<Enemy>(
+                        //     3, "images/ship3.png", enemy->GetCurTile(), 
+                        //     200, 0.7 + 0.2 * j, 100, 0, 100,dir);
                         // e->setDir(dir);
-                        enemiesWaitlist.push_back(std::move(e));
+                        enemiesWaitlist.push_back(std::make_unique<Enemy>(
+                            3, "images/ship3.png", enemy->GetNextTile(), 
+                            200, 0.4 + 0.1 * j, 100, 0, 100,dir));
                     }
                     for (int j = 0; j < 3; j++) {
-                        std::unique_ptr<Enemy> e = std::make_unique<Enemy>(
-                            2, "images/ship2.png", enemy->GetCurTile(),
-                            50, 2, 80, 0.4, 50,dir);
+                        // std::unique_ptr<Enemy> e = std::make_unique<Enemy>(
+                        //     2, "images/ship2.png", enemy->GetCurTile(), 
+                        //     200, 1.4 + 0.2 * j, 80, 0, 100,dir);
                         // e->setDir(dir);
-                        enemiesWaitlist.push_back(std::move(e));
-
+                        // enemiesWaitlist.push_back(std::move(e));
+                        enemiesWaitlist.push_back(std::make_unique<Enemy>(
+                            2, "images/ship2.png", enemy->GetNextTile(), 
+                            50, 0.8 + 0.1 * j, 80, 0, 100,dir));
                     }
+                    
                     break;
                 case 3: // Spawn smaller enemies (type 1)
                     
                     for (int j = 0; j < 3; j++) {
-                        std::unique_ptr<Enemy> e = std::make_unique<Enemy>(
-                            1, "images/ship1.png", enemy->GetCurTile(),
-                            100, 1, 80, 0.4, 25,dir);
+                        // std::unique_ptr<Enemy> e = std::make_unique<Enemy>(
+                        //     1, "images/ship1.png", enemy->GetCurTile(),
+                        //     100, 0.8 + 0.2 * j, 80, 0, 25,dir);
                         // e->setDir(dir);
-                        enemiesWaitlist.push_back(std::move(e));
+                        enemiesWaitlist.push_back(std::make_unique<Enemy>(
+                            1, "images/ship1.png", enemy->GetCurTile(),
+                            100, 0.4 + 0.1 * j, 80, 0, 25,dir));
                     }
                     
                     break;

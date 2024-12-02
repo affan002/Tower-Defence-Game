@@ -259,7 +259,13 @@ sf::Vector2f Enemy::GetPosition(){
     return sf::Vector2f(position.x - (TILELEN/2), position.y - (TILELEN/2)) ;
 }
 std::pair<int,int> Enemy::GetCurTile() {
+    
     return tile;
+}
+
+std::pair<int,int> Enemy::GetNextTile() {
+    return nextTile;
+   
 }
 int Enemy::GetDist(){
     return distanceTraveled;
