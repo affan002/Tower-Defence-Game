@@ -115,7 +115,7 @@ public:
         this->endText.setPosition(this->endPos.first,this->endPos.second+5);
 
         std::srand(std::time(nullptr));
-        this->waves.push_back(new Wave("Wave 1" , 0,2,0,0,1, startPos, player));
+        this->waves.push_back(new Wave("Wave 1" , 5,0,0,2,0, startPos, player));
         this->waves.push_back(new Wave("Wave 2" , 10,5,0,0,0, startPos, player));
         this->waves.push_back(new Wave("Wave 3" , 5,0,5,0,0, startPos, player));
         this->waves.push_back(new Wave("Wave 4" , 0,5,5,5,0, startPos, player));
@@ -207,7 +207,7 @@ public:
 
         player->Update(); // Update player logic
         if (player->health < 1){
-            // quit = true;
+            quit = true;
         }
         updateDrag(window);
         renderDrag(window);
