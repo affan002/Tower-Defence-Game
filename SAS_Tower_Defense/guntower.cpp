@@ -23,8 +23,8 @@ GunTower::~GunTower()
 }
 
 
-void GunTower::Update(const sf::Vector2f mousePos, const float& dt){
-    wait += dt;
+void GunTower::Update(const sf::Vector2f mousePos){
+    
     // bullet animation
     if(this->range.getGlobalBounds().contains(mousePos)){
         this->range.setFillColor(sf::Color(178,178,178,100));
@@ -81,7 +81,7 @@ void GunTower::enemieInRange(std::vector<Enemy*> enemies){
 }
 
 
-void GunTower::collisionDetect(std::vector<Enemy*> enemies, float dt){
+void GunTower::collisionDetect(std::vector<Enemy*> enemies){
     // for(auto i: enemies){
     //     if(i->GetSprite().getGlobalBounds().contains(this->bullet->getBullet().getPosition())){
     //         i->GetHit(this->bullet->damage);

@@ -70,6 +70,9 @@ private:
     //Debugging
     sf::Font debugFont;
     sf::Text debugText;
+    sf::Font debugFont2;
+    sf::Text debugText2;
+    bool abc;
 
     // Dragging
     
@@ -87,6 +90,9 @@ private:
     Vector2i mousePosScreen;
     Vector2i mousePosWindow;
     Vector2f mousePosView;
+
+    
+            
    
 
 public:
@@ -172,6 +178,8 @@ public:
 
     this->initButtons();
     drag.scale(sf::Vector2f(0.6,0.6));
+
+
     }
 
     ~TileMap(){
@@ -204,6 +212,13 @@ public:
     //     }
     // }
 
+    GunTower g("images/tower1.png", sf::Vector2f(48,48), sf::Vector2f(0.6, 0.6));
+    
+
+    updateDrag(window);
+        
+        updateMousePositions(window);
+
         if  (!waves.empty()) {
             (waves.front())->Update();
             if ((waves.front())->HasEnded()){
@@ -219,9 +234,14 @@ public:
         if (player->health < 1){
             quit = true;
         }
-        updateDrag(window);
-        renderDrag(window);
-        updateMousePositions(window);
+
+        for(auto i: towers){
+        i->Update(this->mousePosView);
+        //i->rotate(sf::Vector2i(this->enemies[0]->GetSprite().getPosition().x,this->enemies[0]->GetSprite().getPosition().y), this->enemies[0]->GetSprite().getPosition());
+        
+        
+    }
+        
     }
 
     bool getQuit(){
@@ -254,7 +274,11 @@ public:
         window.draw(this->startText);
         window.draw(this->endText);
         window.draw(this->debugText);
-        
+        window.draw(this->debugText2);
+        renderDrag(window);
+        for(auto i: towers){
+        i->Render(&window);
+    }
        
 
             // Draw all enemies
@@ -282,13 +306,15 @@ public:
         switch (event.type) {
         case sf::Event::MouseButtonPressed:
             // Check if any of the towers is clicked
+            
             if (tower1.getGlobalBounds().contains(mousePosView) && sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
                 this->isPressed1 = true;
-                
+            
                 
             }
             if (tower2.getGlobalBounds().contains(mousePosView) && sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
                 this->isPressed2 = true;
+                
             }
             if (tower3.getGlobalBounds().contains(mousePosView) && sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
                 this->isPressed3 = true;
@@ -381,18 +407,32 @@ void renderDrag(sf::RenderWindow& window){
             std::string str2 = (isPressed2 ? "true2" : "false2");
             std::string str3 = (isPressed3 ? "true3" : "false3");
             std::string str4 = (isPressed4 ? "true4" : "false4");
+            std::string ab = (abc ? "true5" : "false5");
+
+            std::string str5= (sf::Mouse::isButtonPressed(sf::Mouse::Left)?"leftclicked":"nope");
+            sf::FloatRect bounds = tower1.getGlobalBounds();
+            std::string boundsStr = "left: " + std::to_string(bounds.left) + ", top: " + std::to_string(bounds.top) +
+                        ", width: " + std::to_string(bounds.width) + ", height: " + std::to_string(bounds.height);
+
+
             debugFont.loadFromFile("fonts/upheavtt.ttf");
             debugText.setFont(startFont);
-            debugText.setString(str
-             + "    "+str2 +"    "+ str3 +"    "+str4
-            );
+            debugText.setString(boundsStr+"   "+str
+             + "  "+str2 +"  "+ str3 +"  "+str4+"  ");
             debugText.setFillColor(Color::Black);
             debugText.setCharacterSize(20);
             debugText.setPosition(20, 400);
+
+            debugFont2.loadFromFile("fonts/upheavtt.ttf");
+            debugText2.setFont(startFont);
+            debugText2.setString(std::to_string(mousePosView.x)+"   "+std::to_string(mousePosView.y)+"   "+str5);
+            debugText2.setFillColor(Color::Black);
+            debugText2.setCharacterSize(20);
+            debugText2.setPosition(20, 500);
     if(this->isPressed1 || isPressed2 || isPressed3 || isPressed4){
         window.draw(drag);
     }
-}
+} 
 void initButtons(){
     
     this->buttons["tower1"] = new Button(920, 300, 100, 50, "100");
