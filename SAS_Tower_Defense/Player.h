@@ -1,3 +1,7 @@
+#ifndef PLAYER_H
+#define PLAYER_H
+
+
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
 
@@ -42,3 +46,5 @@ class Player
     window.draw(this->coinsText);
         }
 };
+
+#endif
