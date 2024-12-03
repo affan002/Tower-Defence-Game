@@ -1,25 +1,34 @@
-#ifndef MILL_TOWER_HPP
-#define MILL_TOWER_HPP
+#ifndef MillTower_H
+#define MillTower_H
 
 #include "tower.h"
 #include "bullet.h"
 #include "enemy.h"
 #include "player.h"
 
-class millTower: public Tower
+class MillTower: public Tower
 {
 private:
     sf::Texture texture;
     sf::Sprite sprite;
 
+   
+    sf::CircleShape range;
+
+    sf::Vector2f targetEmeny;
+    bool isSomeEmemy;
+
 
     float wait = 0;
 
+    bool isHit = false;
+    // slows down enemy 
+    float speedMulti = 0.5;
     Player *player;   
 
 public:
-    millTower(std::string _path, sf::Vector2f pos, sf::Vector2f resize, Player *player);
-    ~millTower();
+    MillTower(std::string _path, sf::Vector2f pos, sf::Vector2f resize, Player *player);
+    ~MillTower();
 
 
     void Update(const sf::Vector2f mousePos, const float& dt);
@@ -28,7 +37,6 @@ public:
     void enemieInRange(std::vector<Enemy*> enemies);
 
     void collisionDetect(std::vector<Enemy*> enemies, float dt);
-    
 };
 
 

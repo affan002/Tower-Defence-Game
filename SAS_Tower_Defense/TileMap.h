@@ -13,6 +13,7 @@
 #include "Button.cpp"
 #include "rocketlaunchertower.cpp"
 #include "slowdownTower.cpp"
+#include "milltower.cpp"
 // #include "Player.h"
 
 class TileMap {
@@ -152,7 +153,7 @@ public:
     this->t3Cost=300;
 
     // for tower 4 boat
-    if(!this->t4.loadFromFile("images/tower4.png")){
+    if(!this->t4.loadFromFile("images/mill2.png")){
         std::cout << "nope" << std::endl;
     }
     this->tower4.setTexture(t4);
@@ -199,7 +200,7 @@ public:
     GunTower g("images/tower2.png", sf::Vector2f(48,48), sf::Vector2f(0.6, 0.6));
     RocketLauncherTower r("images/tower1.png", sf::Vector2f(48,48), sf::Vector2f(0.6, 0.6));
     SlowDownTower s("images/tower3.png", sf::Vector2f(48,48), sf::Vector2f(0.6, 0.6));
-    
+    MillTower m("images/mill2.png", sf::Vector2f(48,48),sf::Vector2f(0.6,0.6),this->player);
 
     
 
@@ -356,7 +357,7 @@ public:
                 int y = static_cast<int>(mousePosView.y) / 48;
 
                 if (x >= 0 && y >= 0 && x < 15 && y < 15) {
-                    this->towers.push_back(new GunTower("images/tower4.png", sf::Vector2f(x * 48, y * 48), sf::Vector2f(0.6, 0.6)));
+                    this->towers.push_back(new MillTower("images/mill2.png", sf::Vector2f(x * 48, y * 48), sf::Vector2f(0.6, 0.6),this->player));
                     player->coins-=100;
                 }
             }

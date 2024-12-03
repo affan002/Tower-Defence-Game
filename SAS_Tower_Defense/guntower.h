@@ -1,5 +1,5 @@
-#ifndef GUN_TOWER_HPP
-#define GUN_TOWER_HPP
+#ifndef GUN_TOWER_H
+#define GUN_TOWER_H
 
 #include "tower.h"
 #include "bullet.cpp"

@@ -1,44 +1,49 @@
 #include "milltower.h"
 
-millTower::millTower(std::string _path, sf::Vector2f pos, sf::Vector2f resize, Player *player)
+MillTower::MillTower(std::string _path, sf::Vector2f pos, sf::Vector2f resize, Player *player):Tower()
 {
     this->texture.loadFromFile(_path);
     this->sprite.setTexture(texture);
     this->sprite.scale(resize);
-    this->sprite.setOrigin(this->texture.getSize().x/2,this->texture.getSize().y/2);
+    this->sprite.setOrigin(this->texture.getSize().x/2,this->texture.getSize().y/2 );
     this->sprite.setPosition(pos.x+24,pos.y+24);
 
-    this->player = player;
+
+    this->range.setRadius(150);
+    this->range.setOrigin(this->range.getRadius(),this->range.getRadius());
+    this->range.setPosition(pos.x+24,pos.y+24);
+
+    this->isSomeEmemy = false;
+    this->player=player;
+    
 }
 
-millTower::~millTower()
+MillTower::~MillTower()
 {
 }
 
-void millTower::Update(const sf::Vector2f mousePos, const float& dt)
-{
-    wait += dt;
 
-    if(wait >= 10){
+void MillTower::Update(const sf::Vector2f mousePos, const float& dt){
+    wait += 1;
+
+    if(wait >= 1000){
        this->player->coins+=50;
        this->wait=0;
     }
 }
 
-void millTower::Render(sf::RenderTarget* window)
-{
+void MillTower::Render(sf::RenderTarget* window){
     window->draw(sprite);
 }
 
-void millTower::rotate(sf::Vector2i mousePos, sf::Vector2f pos)
-{
+void MillTower::rotate(sf::Vector2i mousePos, sf::Vector2f pos){
+
 }
 
-void millTower::enemieInRange(std::vector<Enemy*> enemies)
-{
+void MillTower::enemieInRange(std::vector<Enemy*> enemies){
+
 }
 
-void millTower::collisionDetect(std::vector<Enemy*> enemies, float dt)
-{
-}
 
+void MillTower::collisionDetect(std::vector<Enemy*> enemies, float dt){
+}
