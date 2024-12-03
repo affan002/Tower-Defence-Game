@@ -73,7 +73,13 @@ void Wave::Update() {
         enemy->Update();  // Update the enemy logic
         
         if (enemy->GetCurTile() == getEndPos()) {
-            player->health -= 1;  // Deduct health if the enemy reaches the end
+            switch (enemy->GetType()) {
+            case 1 :player->health -= 1;  break;
+            case 2 :player->health -= 2;  break;
+            case 3 :player->health -= 3;  break;
+            case 4 :player->health -= 4;  break;
+            case 5 :player->health -= 5;  break;
+            }
             // enemies.push_back(std::make_unique<Enemy>(1,"images/ship1.png",startPos, 100, 1, 80, 2, 25));
             it = enemies.erase(it);  // Remove the enemy and get the iterator to the next one
             
