@@ -1,5 +1,5 @@
-#ifndef BAZOOKA_TOWER_HPP
-#define BAZOOKA_TOWER_HPP
+#ifndef RocketLauncherTower_HPP
+#define RocketLauncherTower_HPP
 
 
 #include "tower.h"

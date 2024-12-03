@@ -12,6 +12,7 @@
 #include "guntower.cpp"
 #include "Button.cpp"
 #include "rocketlaunchertower.cpp"
+#include "slowdownTower.cpp"
 // #include "Player.h"
 
 class TileMap {
@@ -68,25 +69,11 @@ private:
     
 
 
-    //Debugging
-    sf::Font debugFont;
-    sf::Text debugText;
-    sf::Font debugFont2;
-    sf::Text debugText2;
-    bool abc;
-
     // Dragging
     
     sf::Texture d;
     sf::Sprite drag;
    
-   // Dropping
-
-
-    // buttons
-    std::map<std::string, Button*> buttons; 
-    Font titleFont;
-    Font font;
    
     Vector2i mousePosScreen;
     Vector2i mousePosWindow;
@@ -139,7 +126,7 @@ public:
         // enemies.push_back(new Enemy(1, "images/ship1.png", startPos, 100, 1.5, 80, 4, 25));
 
 
-        if(!this->t1.loadFromFile("images/tower1.png")){
+        if(!this->t1.loadFromFile("images/tower2.png")){
         std::cout << "nope" << std::endl;
     }
     this->tower1.setTexture(t1);
@@ -147,7 +134,7 @@ public:
     this->t1Cost=100;
 
     // for tower 2 freeze_tower
-    if(!this->t2.loadFromFile("images/tower2.png")){
+    if(!this->t2.loadFromFile("images/tower1.png")){
         std::cout << "nope" << std::endl;
     }
     this->tower2.setTexture(t2);
@@ -173,9 +160,6 @@ public:
     this->tower4.scale(sf::Vector2f(0.778,0.778));
     this->t4Cost=350;
 
-
-    this->titleFont.loadFromFile("fonts/Robus.otf");
-    this->font.loadFromFile("fonts/upheavtt.ttf");
 
     drag.scale(sf::Vector2f(0.6,0.6));
 
@@ -212,7 +196,9 @@ public:
     //     }
     // }
 
-    GunTower g("images/tower1.png", sf::Vector2f(48,48), sf::Vector2f(0.6, 0.6));
+    GunTower g("images/tower2.png", sf::Vector2f(48,48), sf::Vector2f(0.6, 0.6));
+    RocketLauncherTower r("images/tower1.png", sf::Vector2f(48,48), sf::Vector2f(0.6, 0.6));
+    SlowDownTower s("images/tower3.png", sf::Vector2f(48,48), sf::Vector2f(0.6, 0.6));
     
 
     
@@ -281,8 +267,6 @@ public:
 
         window.draw(this->startText);
         window.draw(this->endText);
-        window.draw(this->debugText);
-        window.draw(this->debugText2);
         renderDrag(window);
         for(auto i: towers){
         i->Render(&window);
@@ -336,38 +320,38 @@ public:
 
         case sf::Event::MouseButtonReleased:
             // Check if a tower is placed within bounds
-            if (isPressed1 && mousePosView.x < 720 && mousePosView.y < 720) {
+            if (isPressed1 && mousePosView.x < 720 && mousePosView.y < 720 && player->coins>=100) {
                 int x = static_cast<int>(mousePosView.x) / 48;  // Ensure it's an integer division
                 int y = static_cast<int>(mousePosView.y) / 48;
 
                 // Ensure x and y are within valid bounds
                 if (x >= 0 && y >= 0 && x < 15 && y < 15) {  // Assuming 15x15 grid
-                    this->towers.push_back(new GunTower("images/tower1.png", sf::Vector2f(x * 48, y * 48), sf::Vector2f(0.6, 0.6)));
+                    this->towers.push_back(new GunTower("images/tower2.png", sf::Vector2f(x * 48, y * 48), sf::Vector2f(0.6, 0.6)));
                 player->coins-=100;
                 }
             }
 
-            if (isPressed2 && mousePosView.x < 720 && mousePosView.y < 720) {
+            if (isPressed2 && mousePosView.x < 720 && mousePosView.y < 720&& player->coins>=200) {
                 int x = static_cast<int>(mousePosView.x) / 48;
                 int y = static_cast<int>(mousePosView.y) / 48;
 
                 if (x >= 0 && y >= 0 && x < 15 && y < 15) {
-                    this->towers.push_back(new RocketLauncherTower("images/tower2.png", sf::Vector2f(x * 48, y * 48), sf::Vector2f(0.6, 0.6)));
+                    this->towers.push_back(new RocketLauncherTower("images/tower1.png", sf::Vector2f(x * 48, y * 48), sf::Vector2f(0.6, 0.6)));
                 player->coins-=200;
                 }
             }
 
-            if (isPressed3 && mousePosView.x < 720 && mousePosView.y < 720) {
+            if (isPressed3 && mousePosView.x < 720 && mousePosView.y < 720&& player->coins>=150) {
                 int x = static_cast<int>(mousePosView.x) / 48;
                 int y = static_cast<int>(mousePosView.y) / 48;
 
                 if (x >= 0 && y >= 0 && x < 15 && y < 15) {
-                    this->towers.push_back(new GunTower("images/tower3.png", sf::Vector2f(x * 48, y * 48), sf::Vector2f(0.6, 0.6)));
+                    this->towers.push_back(new SlowDownTower("images/tower3.png", sf::Vector2f(x * 48, y * 48), sf::Vector2f(0.6, 0.6)));
                 player->coins-=150;
                 }
             }
 
-            if (isPressed4 && mousePosView.x < 720 && mousePosView.y < 720) {
+            if (isPressed4 && mousePosView.x < 720 && mousePosView.y < 720&& player->coins>=100) {
                 int x = static_cast<int>(mousePosView.x) / 48;
                 int y = static_cast<int>(mousePosView.y) / 48;
 
@@ -415,32 +399,7 @@ if(this->isPressed1 || this->isPressed2 || this->isPressed3|| this->isPressed4){
 
 
 void renderDrag(sf::RenderWindow& window){
-    std::string str = (isPressed1 ? "true1" : "false1");
-            std::string str2 = (isPressed2 ? "true2" : "false2");
-            std::string str3 = (isPressed3 ? "true3" : "false3");
-            std::string str4 = (isPressed4 ? "true4" : "false4");
-            std::string ab = (abc ? "true5" : "false5");
-
-            std::string str5= (sf::Mouse::isButtonPressed(sf::Mouse::Left)?"leftclicked":"nope");
-            sf::FloatRect bounds = tower1.getGlobalBounds();
-            std::string boundsStr = "left: " + std::to_string(bounds.left) + ", top: " + std::to_string(bounds.top) +
-                        ", width: " + std::to_string(bounds.width) + ", height: " + std::to_string(bounds.height);
-
-
-            debugFont.loadFromFile("fonts/upheavtt.ttf");
-            debugText.setFont(startFont);
-            debugText.setString(boundsStr+"   "+str
-             + "  "+str2 +"  "+ str3 +"  "+str4+"  ");
-            debugText.setFillColor(Color::Black);
-            debugText.setCharacterSize(20);
-            debugText.setPosition(20, 400);
-
-            debugFont2.loadFromFile("fonts/upheavtt.ttf");
-            debugText2.setFont(startFont);
-            debugText2.setString(std::to_string(mousePosView.x)+"   "+std::to_string(mousePosView.y)+"   "+str5);
-            debugText2.setFillColor(Color::Black);
-            debugText2.setCharacterSize(20);
-            debugText2.setPosition(20, 500);
+    
     if(this->isPressed1 || isPressed2 || isPressed3 || isPressed4){
         window.draw(drag);
     }

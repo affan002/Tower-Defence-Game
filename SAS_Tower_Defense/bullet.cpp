@@ -18,7 +18,7 @@ Bullet::~Bullet()
 
 
 void Bullet::Shoot(sf::Vector2f targetPos, sf::Vector2f curPos){
-    float dt = 1/time.getElapsedTime().asSeconds();
+    // float dt = 1/time.getElapsedTime().asSeconds();
     sf::Vector2f source = targetPos-curPos;
     float length = sqrt((source.x * source.x) + (source.y * source.y));
     source.x = source.x / length;

@@ -58,7 +58,7 @@ void SlowDownTower::enemieInRange(std::vector<Enemy*> enemies){
         if(this->inRange(i->GetSprite().getPosition(), range)){
             this->targetEmeny = i->GetSprite().getPosition();
             this->isSomeEmemy = true;
-            i->setSpeed((i->getOriginalSpeed())*0.1);
+            i->setSpeed((i->getOriginalSpeed())*0.5);
             i->SetFrozenEffect();
         }
         else{

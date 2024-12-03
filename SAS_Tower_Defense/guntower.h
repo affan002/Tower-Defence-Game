@@ -22,6 +22,8 @@ private:
     float wait = 0;
 
     bool isHit = false;   
+        sf::Text debugText;
+        sf::Font debugfont;
 
 public:
     GunTower(std::string _path, sf::Vector2f pos, sf::Vector2f resize);

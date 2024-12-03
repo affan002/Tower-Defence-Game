@@ -25,6 +25,8 @@ GunTower::~GunTower()
 
 
 void GunTower::Update(const sf::Vector2f mousePos, const float& dt){
+    
+    
     wait += dt;
     // bullet animation
     if(this->range.getGlobalBounds().contains(mousePos)){
@@ -35,12 +37,26 @@ void GunTower::Update(const sf::Vector2f mousePos, const float& dt){
     }
 
     if(this->isSomeEmemy){
+        string a=isHit?"yes":"no";
+        debugfont.loadFromFile("fonts/upheavtt.ttf");
+    debugText.setFont(debugfont);
+    debugText.setString(a);
+    debugText.setFillColor(Color::White);
+    debugText.setCharacterSize(20);
+    debugText.setPosition(110, 200);
+
+
         this->rotate(sf::Vector2i(this->targetEmeny.x,this->targetEmeny.y), this->targetEmeny);
         this->bullet->Update(this->targetEmeny, this->sprite.getPosition());
         this->isHit=true;
+
+        
     }
-    if(isHit &&  wait >= 0.5 &&(this->bullet->getBullet().getPosition().x>1280 || this->bullet->getBullet().getPosition().x<0 || this->bullet->getBullet().getPosition().y>720 || this->bullet->getBullet().getPosition().y<0)
+    if(isHit && wait >= 2 //&&(this->bullet->getBullet().getPosition().x>720 || this->bullet->getBullet().getPosition().x<0 || this->bullet->getBullet().getPosition().y>720 || this->bullet->getBullet().getPosition().y<0)
     ){
+        
+
+    
         this->bullet->Reload();
         wait = 0;
         isHit = false;
@@ -50,6 +66,7 @@ void GunTower::Update(const sf::Vector2f mousePos, const float& dt){
 void GunTower::Render(sf::RenderTarget* window){
     window->draw(range);
     window->draw(sprite);
+    window->draw(debugText);
     if(this->isSomeEmemy){
         this->bullet->Render(window);
     }

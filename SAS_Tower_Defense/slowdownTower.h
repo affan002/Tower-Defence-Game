@@ -1,5 +1,5 @@
-#ifndef FREEZE_TOWER_HPP
-#define FREEZE_TOWER_HPP
+#ifndef SlowDownTower_HPP
+#define SlowDownTower_HPP
 
 
 #include "tower.h"
