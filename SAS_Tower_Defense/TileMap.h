@@ -343,7 +343,7 @@ public:
 
                 if (x >= 0 && y >= 0 && x < 15 && y < 15) {
                     this->towers.push_back(new SlowDownTower("images/tower3.png", sf::Vector2f(x * 48, y * 48), sf::Vector2f(0.6, 0.6)));
-                player->coins-=150;
+                player->coins-=200;
                 }
             }
 
@@ -353,7 +353,7 @@ public:
 
                 if (x >= 0 && y >= 0 && x < 15 && y < 15) {
                     this->towers.push_back(new MillTower("images/mill2.png", sf::Vector2f(x * 48, y * 48), sf::Vector2f(0.6, 0.6),this->player));
-                    player->coins-=100;
+                    player->coins-=250;
                 }
             }
             // Reset the pressed flags
