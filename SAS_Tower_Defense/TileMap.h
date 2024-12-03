@@ -114,8 +114,8 @@ public:
         this->endText.setPosition(this->endPos.first,this->endPos.second+5);
 
         std::srand(std::time(nullptr));
-        this->waves.push_back(new Wave("Wave 1" , 5,0,0,2,0, startPos, player));
-        this->waves.push_back(new Wave("Wave 2" , 10,5,0,0,0, startPos, player));
+        this->waves.push_back(new Wave("Wave 1" , 5,0,0,0,0, startPos, player));
+        this->waves.push_back(new Wave("Wave 2" , 5,5,0,0,0, startPos, player));
         this->waves.push_back(new Wave("Wave 3" , 5,0,5,0,0, startPos, player));
         this->waves.push_back(new Wave("Wave 4" , 0,5,5,5,0, startPos, player));
         this->waves.push_back(new Wave("Wave 5" , 0,0,0,0,2, startPos, player));
@@ -128,7 +128,7 @@ public:
         std::cout << "nope" << std::endl;
     }
     this->tower1.setTexture(t1);
-    this->tower1.setPosition(920, 300);
+    this->tower1.setPosition(920, 200);
     this->t1Cost=100;
 
     
@@ -136,7 +136,7 @@ public:
         std::cout << "nope" << std::endl;
     }
     this->tower2.setTexture(t2);
-    this->tower2.setPosition(1100, 300);
+    this->tower2.setPosition(1100, 200);
     this->tower2.scale(sf::Vector2f(0.7,0.7));
     this->t2Cost=200;
 
@@ -263,7 +263,7 @@ public:
 
         window.draw(this->startText);
         window.draw(this->endText);
-        renderDrag(window);
+        
         for(auto i: towers){
         i->Render(&window);
     }
@@ -278,7 +278,8 @@ public:
             (waves.front())->Render(window);
         }
         window.draw(whiteSpace);
-         window.draw(this->tower1);
+        renderDrag(window);
+        window.draw(this->tower1);
         window.draw(this->tower2);
         window.draw(this->tower3);
         window.draw(this->tower4);
@@ -316,7 +317,7 @@ public:
 
         case sf::Event::MouseButtonReleased:
             // Check if a tower is placed within bounds
-            if (isPressed1 && mousePosView.x < 900 && mousePosView.y < 720 && player->coins>=100) {
+            if (isPressed1 && mousePosView.x < 1200 && mousePosView.y < 720 && player->coins>=100) {
                 int x = static_cast<int>(mousePosView.x) / 48;  // Ensure it's an integer division
                 int y = static_cast<int>(mousePosView.y) / 48;
 
@@ -327,17 +328,17 @@ public:
                 }
             }
 
-            if (isPressed2 && mousePosView.x < 900 && mousePosView.y < 720&& player->coins>=200) {
-                int x = static_cast<int>(mousePosView.x) / 48;
-                int y = static_cast<int>(mousePosView.y) / 48;
+            if (isPressed2 && mousePosView.x < 1200 && mousePosView.y < 720&& player->coins>=200) {
+                int x = static_cast<int>(mousePosView.x) / 45;
+                int y = static_cast<int>(mousePosView.y) / 45;
 
                 if (x >= 0 && y >= 0 && x < 15 && y < 15) {
-                    this->towers.push_back(new RocketLauncherTower("images/tower1.png", sf::Vector2f(x * 48, y * 48), sf::Vector2f(0.6, 0.6)));
+                    this->towers.push_back(new RocketLauncherTower("images/tower1.png", sf::Vector2f(x * 45, y * 45), sf::Vector2f(0.6, 0.6)));
                 player->coins-=200;
                 }
             }
 
-            if (isPressed3 && mousePosView.x < 900 && mousePosView.y < 720&& player->coins>=150) {
+            if (isPressed3 && mousePosView.x < 1200 && mousePosView.y < 720&& player->coins>=150) {
                 int x = static_cast<int>(mousePosView.x) / 48;
                 int y = static_cast<int>(mousePosView.y) / 48;
 
@@ -347,7 +348,7 @@ public:
                 }
             }
 
-            if (isPressed4 && mousePosView.x < 900 && mousePosView.y < 720&& player->coins>=100) {
+            if (isPressed4 && mousePosView.x < 1200 && mousePosView.y < 720&& player->coins>=100) {
                 int x = static_cast<int>(mousePosView.x) / 48;
                 int y = static_cast<int>(mousePosView.y) / 48;
 
