@@ -24,8 +24,8 @@ RocketLauncherTower::~RocketLauncherTower()
 }
 
 
-void RocketLauncherTower::Update(const sf::Vector2f mousePos, const float& dt){
-    wait += dt;
+void RocketLauncherTower::Update(const sf::Vector2f mousePos){
+    wait += 1;
     // bullet animation
     if(this->range.getGlobalBounds().contains(mousePos)){
         this->range.setFillColor(sf::Color(178,178,178,100));
@@ -39,7 +39,7 @@ void RocketLauncherTower::Update(const sf::Vector2f mousePos, const float& dt){
         this->bullet->Update(this->targetEmeny, this->sprite.getPosition());
         this->isHit=true;
     }
-    if(isHit && wait >= 10 &&(this->bullet->getBullet().getPosition().x>720 || this->bullet->getBullet().getPosition().x<0 || this->bullet->getBullet().getPosition().y>720 || this->bullet->getBullet().getPosition().y<0)){
+    if(isHit && wait >= 300){
         this->bullet->Reload();
         wait = 0;
         isHit = false;
@@ -79,7 +79,7 @@ void RocketLauncherTower::enemieInRange(std::vector<Enemy*> enemies){
 }
 
 
-void RocketLauncherTower::collisionDetect(std::vector<Enemy*> enemies, float dt){
+void RocketLauncherTower::collisionDetect(std::vector<Enemy*> enemies){
     for(auto i: enemies){
         if(i->GetSprite().getGlobalBounds().contains(this->bullet->getBullet().getPosition())){
             i->GetHit(this->bullet->damage);

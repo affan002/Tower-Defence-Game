@@ -50,19 +50,19 @@ private:
     bool isPressed1 = false;
     int t1Cost;
 
-    // For tower 2 freeze tower
+    // For tower 2 Rocket Launcher tower
     sf::Texture t2;
     sf::Sprite tower2;
     bool isPressed2 = false;
     int t2Cost;
 
-    // For Bazooka tower
+    // For SlowDown tower
     sf::Texture t3;
     sf::Sprite tower3;
     bool isPressed3 = false;
     int t3Cost;
 
-    // For Boat 
+    // For MillTower 
     sf::Texture t4;
     sf::Sprite tower4;
     bool isPressed4 = false;
@@ -81,9 +81,6 @@ private:
     Vector2f mousePosView;
 
     
-            
-   
-
 public:
     TileMap() {
         
@@ -134,7 +131,7 @@ public:
     this->tower1.setPosition(920, 300);
     this->t1Cost=100;
 
-    // for tower 2 freeze_tower
+    
     if(!this->t2.loadFromFile("images/tower1.png")){
         std::cout << "nope" << std::endl;
     }
@@ -143,7 +140,7 @@ public:
     this->tower2.scale(sf::Vector2f(0.7,0.7));
     this->t2Cost=200;
 
-    // for tower 3 bazooka_tower
+    
     if(!this->t3.loadFromFile("images/tower3.png")){
         std::cout << "nope" << std::endl;
     }
@@ -152,7 +149,7 @@ public:
     this->tower3.scale(sf::Vector2f(0.778,0.778));
     this->t3Cost=300;
 
-    // for tower 4 boat
+    
     if(!this->t4.loadFromFile("images/mill2.png")){
         std::cout << "nope" << std::endl;
     }
@@ -179,7 +176,7 @@ public:
     // enemies.clear();
     }
 
-    void update(sf::RenderWindow& window,float dt) {
+    void update(sf::RenderWindow& window) {
     // for (auto it = enemies.begin(); it != enemies.end();) {
     //     Enemy* enemy = *it;
 
@@ -215,13 +212,13 @@ public:
             win = true;
         }
 
-        player->Update(); // Update player logic
+        player->Update(); 
         if (player->health < 1){
             quit = true;
         }
 
         for(auto i: towers){
-        i->Update(this->mousePosView,dt);
+        i->Update(this->mousePosView);
         std::vector<Enemy*> rawEnemies;
         for (auto& enemyPtr : waves.front()->getCurEnemies()) {
         rawEnemies.push_back(enemyPtr.get());  // Use get() to get raw pointer
@@ -229,12 +226,10 @@ public:
         i->enemieInRange(rawEnemies);
 
         // i->enemieInRange(waves.front()->getCurEnemies());
-        i->collisionDetect(rawEnemies,dt);
-        //i->rotate(sf::Vector2i(this->enemies[0]->GetSprite().getPosition().x,this->enemies[0]->GetSprite().getPosition().y), this->enemies[0]->GetSprite().getPosition());
-
-    }
-    updateDrag(window);
+        i->collisionDetect(rawEnemies);
         
+    }
+        updateDrag(window);
         updateMousePositions(window);
         
     }
@@ -321,7 +316,7 @@ public:
 
         case sf::Event::MouseButtonReleased:
             // Check if a tower is placed within bounds
-            if (isPressed1 && mousePosView.x < 720 && mousePosView.y < 720 && player->coins>=100) {
+            if (isPressed1 && mousePosView.x < 900 && mousePosView.y < 720 && player->coins>=100) {
                 int x = static_cast<int>(mousePosView.x) / 48;  // Ensure it's an integer division
                 int y = static_cast<int>(mousePosView.y) / 48;
 
@@ -332,7 +327,7 @@ public:
                 }
             }
 
-            if (isPressed2 && mousePosView.x < 720 && mousePosView.y < 720&& player->coins>=200) {
+            if (isPressed2 && mousePosView.x < 900 && mousePosView.y < 720&& player->coins>=200) {
                 int x = static_cast<int>(mousePosView.x) / 48;
                 int y = static_cast<int>(mousePosView.y) / 48;
 
@@ -342,7 +337,7 @@ public:
                 }
             }
 
-            if (isPressed3 && mousePosView.x < 720 && mousePosView.y < 720&& player->coins>=150) {
+            if (isPressed3 && mousePosView.x < 900 && mousePosView.y < 720&& player->coins>=150) {
                 int x = static_cast<int>(mousePosView.x) / 48;
                 int y = static_cast<int>(mousePosView.y) / 48;
 
@@ -352,7 +347,7 @@ public:
                 }
             }
 
-            if (isPressed4 && mousePosView.x < 720 && mousePosView.y < 720&& player->coins>=100) {
+            if (isPressed4 && mousePosView.x < 900 && mousePosView.y < 720&& player->coins>=100) {
                 int x = static_cast<int>(mousePosView.x) / 48;
                 int y = static_cast<int>(mousePosView.y) / 48;
 
@@ -362,12 +357,12 @@ public:
                 }
             }
             // Reset the pressed flags
-            // else{
+          
                 isPressed1 = false;
                 isPressed2 = false;
                 isPressed3 = false;
                 isPressed4 = false;
-            // }
+           
             break;
 
         default:
@@ -393,8 +388,6 @@ if(this->isPressed1 || this->isPressed2 || this->isPressed3|| this->isPressed4){
     }
     
 }
-
-
 
 
 

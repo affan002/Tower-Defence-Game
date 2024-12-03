@@ -23,7 +23,7 @@ MillTower::~MillTower()
 }
 
 
-void MillTower::Update(const sf::Vector2f mousePos, const float& dt){
+void MillTower::Update(const sf::Vector2f mousePos){
     wait += 1;
 
     if(wait >= 1000){
@@ -45,5 +45,5 @@ void MillTower::enemieInRange(std::vector<Enemy*> enemies){
 }
 
 
-void MillTower::collisionDetect(std::vector<Enemy*> enemies, float dt){
+void MillTower::collisionDetect(std::vector<Enemy*> enemies){
 }

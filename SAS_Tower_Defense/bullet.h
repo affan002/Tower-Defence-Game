@@ -1,5 +1,5 @@
-#ifndef BULLET_HPP
-#define BULLET_HPP
+#ifndef BULLET_H
+#define BULLET_H
 
 
 #include <SFML/Graphics.hpp>

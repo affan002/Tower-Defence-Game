@@ -14,8 +14,6 @@ private:
     Button startButton;
     Button quitButton;
     TileMap tileMap;
-    Clock dtclock;
-    float dt;
     // Player* player;
 
 public:
@@ -80,7 +78,7 @@ private:
 
     void update() {
         if (currentState == "GAME"){
-            tileMap.update(window,dt);
+            tileMap.update(window);
         }
         if (currentState == "GAME" && tileMap.getQuit()){
             currentState = "END";
@@ -131,7 +129,5 @@ private:
         // player->draw(window);
         window.display();
     }
-    void UpdateDT(){
-    this->dt = this->dtclock.restart().asSeconds();
-}
+
 };

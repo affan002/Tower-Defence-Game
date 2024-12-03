@@ -22,8 +22,8 @@ SlowDownTower::~SlowDownTower()
 }
 
 
-void SlowDownTower::Update(const sf::Vector2f mousePos, const float& dt){
-    wait += dt;
+void SlowDownTower::Update(const sf::Vector2f mousePos){
+    
     // bullet animation
     if(this->range.getGlobalBounds().contains(mousePos)){
         this->range.setFillColor(sf::Color(178,178,178,100));
@@ -52,7 +52,7 @@ void SlowDownTower::rotate(sf::Vector2i mousePos, sf::Vector2f pos){
 }
 
 void SlowDownTower::enemieInRange(std::vector<Enemy*> enemies){
-    int j = 0;
+    
     this->isSomeEmemy = false;
     for(auto i: enemies){
         if(this->inRange(i->GetSprite().getPosition(), range)){
@@ -65,10 +65,10 @@ void SlowDownTower::enemieInRange(std::vector<Enemy*> enemies){
             i->setSpeed(i->getOriginalSpeed());
             i->RemoveFrozenEffect();
         }
-        j++;    
+           
     }    
 }
 
 
-void SlowDownTower::collisionDetect(std::vector<Enemy*> enemies, float dt){
+void SlowDownTower::collisionDetect(std::vector<Enemy*> enemies){
 }

@@ -24,7 +24,7 @@ GunTower::~GunTower()
 }
 
 
-void GunTower::Update(const sf::Vector2f mousePos, const float& dt){
+void GunTower::Update(const sf::Vector2f mousePos){
     
     
     wait += 1;
@@ -37,14 +37,6 @@ void GunTower::Update(const sf::Vector2f mousePos, const float& dt){
     }
 
     if(this->isSomeEmemy){
-    //     string a=isHit?"yes":"no";
-    //     debugfont.loadFromFile("fonts/upheavtt.ttf");
-    // debugText.setFont(debugfont);
-    // debugText.setString(a);
-    // debugText.setFillColor(Color::White);
-    // debugText.setCharacterSize(20);
-    // debugText.setPosition(110, 200);
-
 
         this->rotate(sf::Vector2i(this->targetEmeny.x,this->targetEmeny.y), this->targetEmeny);
         this->bullet->Update(this->targetEmeny, this->sprite.getPosition());
@@ -53,8 +45,6 @@ void GunTower::Update(const sf::Vector2f mousePos, const float& dt){
         
     }
     if(isHit && wait >= 300){
-        
-
     
         this->bullet->Reload();
         wait = 0;
@@ -83,25 +73,23 @@ void GunTower::rotate(sf::Vector2i mousePos, sf::Vector2f pos){
 }
 
 void GunTower::enemieInRange(std::vector<Enemy*> enemies){
-    int j = 0;
+    // int j = 0;
     this->isSomeEmemy = false;
     for(auto i: enemies){
         if(this->inRange(i->GetSprite().getPosition(), range)){
             this->targetEmeny = i->GetSprite().getPosition();
             this->isSomeEmemy = true;
-            /* if(i->GetSprite().getGlobalBounds().contains(this->bullet->getBullet().getPosition())){
-                i->GetHit(this->bullet->damage);
-            } */
+            
             return;
         }
-        j++;
+        // j++;
         
     }
       
 }
 
 
-void GunTower::collisionDetect(std::vector<Enemy*> enemies, float dt){
+void GunTower::collisionDetect(std::vector<Enemy*> enemies){
     for(auto i: enemies){
         if(i->GetSprite().getGlobalBounds().contains(this->bullet->getBullet().getPosition())){
             i->GetHit(this->bullet->damage);

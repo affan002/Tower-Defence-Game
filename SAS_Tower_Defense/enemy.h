@@ -1,5 +1,5 @@
-#ifndef TD_ENEMY_HPP
-#define TD_ENEMY_HPP
+#ifndef ENEMY_H
+#define ENEMY_H
 
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
